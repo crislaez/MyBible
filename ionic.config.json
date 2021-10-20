@@ -1,0 +1,7 @@
+{
+  "name": "myBible",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
