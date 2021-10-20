@@ -3,7 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  baseEndpoint: 'https://api.biblia.com/v1/bible/',
+  baseEndpointBook: 'https://api.biblia.com/v1/bible/contents',
+  baseEndpointVideo: 'https://www.googleapis.com/youtube/v3/',
+  apyKey:'1269d47e5be7166370b38c898b9c4920',
+  apyKeyGoogle: 'AIzaSyB6lt4F1kCLbwL8ZzNMX3Ms-x9FhuaG7Oc'
 };
 
 /*

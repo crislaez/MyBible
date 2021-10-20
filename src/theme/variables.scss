@@ -234,3 +234,185 @@
     --ion-card-background: #1e1e1e;
   }
 }
+
+//START CONFIG
+// FONT
+*{
+  // font-family: 'Source Sans Pro', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+$principalColor: #0B3665;
+
+ion-refresher {
+  // margin-top: 50px;
+  ion-spinner{
+    position: relative;
+    display: flex;
+    margin: 0;
+  }
+}
+
+ion-spinner {
+  display: block;
+  position: absolute;
+  margin: 0 auto;
+  margin-top: 80%;
+}
+
+.background-component {
+  --background: #0B3665;
+}
+
+.color-component {
+  --color: #0B3665;
+}
+
+.text-color-white {
+  color: white;
+}
+
+// PAGE COLOR
+.title-color{
+  color: #545454;
+}
+
+.text-color{
+  // color: #545454;
+  color: white;
+}
+
+.text-second-color{
+  color: black;
+}
+
+// PAGE BACKGROUND COLOR
+.components-color{
+  background: #405058;
+}
+
+.ripple-parent {
+  position: relative;
+  overflow: hidden;
+}
+
+.capital-letter{
+  text-transform: capitalize;
+}
+
+
+//ERROR
+.error-serve{
+  width: 100%;
+  height: 500px;
+  display: block;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: center;
+
+  div{
+    width: 80%;
+    text-align: center;
+  }
+}
+
+ion-card{
+  box-shadow: none !important;
+  touch-action: pan-y !important;
+}
+
+ion-searchbar {
+  --box-shadow: none !important;
+  --border-radius: 50px !important;
+}
+//END CONFIG*****************************
+
+.container{
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: #EEEEEE !important;  // F8F8F8
+  // EEEEEE
+  // align-items: flex-start;
+  align-content: flex-start;
+}
+
+.header{
+  width: 100%;
+  margin-top: 70px;
+  min-height: 50px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  align-content: flex-end;
+  background: #EEEEEE !important;
+
+  h1, h2{
+    font-weight: bold;
+    font-size: 35px;
+    color: #545454;
+  }
+
+  ion-back-button{
+    width: 15%;
+  }
+
+  form{
+    margin-top: 10px;
+    width: 90%;
+  }
+}
+
+.span{
+  font-weight: bold;
+
+}
+
+.margin-top{
+  margin-top: 10px;
+}
+
+.background-none{
+  background: none;
+}
+
+.align-text{
+  text-align: center;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: row;
+  min-width: 100%;
+  width: auto;
+  overflow-x: scroll;
+  background: #EEEEEE;
+
+  ion-button {
+    box-shadow: none;
+  }
+
+}
+
+.fade-in-card {
+  animation: fadeIn 2s;
+  animation: fadeInUp 0.4s;
+}
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@keyframes fadeInUp {
+  0% {transform:translateY(60px) scale(0.5,0.5);}
+  100% {transform:translateY(0px) scale(1,1);}
+}
+

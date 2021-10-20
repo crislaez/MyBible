@@ -1,0 +1,1 @@
+export { IonicGestureConfig } from './IonicGestureConfig';
