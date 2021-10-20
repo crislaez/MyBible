@@ -4,5 +4,4 @@
 
 node_modules
 www
-src/environments/environment.prod.ts
-src/environments/environment
+src/environments

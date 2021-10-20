@@ -1,4 +1,4 @@
-## (front-end) BIBLECL
+## (front-end) MYBIBLE
 
 Mi Biblia SBRV60 es una aplicación hecha en Ionic (Angular, TypeScript, Sass/Css, Html, Rxjs, Ngrx)
 
