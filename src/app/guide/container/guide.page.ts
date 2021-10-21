@@ -102,7 +102,7 @@ export class GuidePage{
   componentStautsObs$ = new EventEmitter<{reload: string, search: string}>();
   componentStatus: {reload: string, search: string} = {reload:'', search:''};
 
-  status$ = this.store.select(fromBible.getSearchStatus)
+  status$ = this.store.select(fromBible.getSearchStatus);
   searchData$ = this.componentStautsObs$.pipe(
     startWith(this.componentStatus),
     tap(({search}) => {

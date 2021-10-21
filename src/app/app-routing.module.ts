@@ -6,7 +6,6 @@ const routes: Routes = [
   {
     path: 'chapter',
     loadChildren: () => import('./chapters/chapters.module').then( m => m.ChaperPageModule),
-    // canLoad: [LangGuard],
     canActivate: [LangGuard],
   },
   {
@@ -26,7 +25,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'how-is-he',
+    redirectTo: 'favourite',
     pathMatch: 'full',
   }
 ];

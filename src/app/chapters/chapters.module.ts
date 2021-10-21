@@ -1,13 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-import { ChaptersPageRoutingModule } from './chapters-routing.module';
-import { ChaptersPage } from './containers/chapters.page';
 import { BibleModule } from '@bible/shared/bible/bible.module';
+import { GenericsModule } from '@bible/shared/generics/generics.module';
+import { StorageModule } from '@bible/shared/storage/storage.module';
+import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { LongPressModule } from 'ionic-long-press';
-import { GenericsModule } from '@bible/shared/generics/generics.module';
+import { ChaptersPageRoutingModule } from './chapters-routing.module';
+import { ChaptersPage } from './containers/chapters.page';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { GenericsModule } from '@bible/shared/generics/generics.module';
     TranslateModule.forChild(),
     BibleModule,
     GenericsModule,
+    StorageModule,
     LongPressModule,
     ChaptersPageRoutingModule
   ],

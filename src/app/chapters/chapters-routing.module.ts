@@ -10,6 +10,11 @@ const routes: Routes = [
      {
        path:':passage',
        component: ChaptersPage
+     },
+     {
+      path: '',
+      redirectTo: 'Genesis',
+      pathMatch: 'full',
      }
    ]
   }

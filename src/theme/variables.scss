@@ -373,7 +373,6 @@ ion-searchbar {
 
 .span{
   font-weight: bold;
-
 }
 
 .margin-top{
@@ -386,6 +385,25 @@ ion-searchbar {
 
 .align-text{
   text-align: center;
+}
+
+.flex-content{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.small-text {
+  font-size: 12px;
+}
+
+.medium-text {
+  font-size: 20px;
+}
+
+.max-width{
+  width: 90%;
 }
 
 .header-content {

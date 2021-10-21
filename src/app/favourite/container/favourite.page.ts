@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import * as BibleActions from '@bible/shared/bible/actions/bible.actions';
+import { Menu } from '@bible/shared/bible/models';
 import * as fromBible from '@bible/shared/bible/selectors/bible.selectors';
 import { checkObject } from '@bible/shared/shared/utils/utils';
+import { fromStorage } from '@bible/shared/storage';
 import { Store } from '@ngrx/store';
 import { map, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
@@ -16,6 +19,22 @@ import { map, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
         <div class="header fade-in-card">
           <h1>{{ 'COMMON.DAILY_DEVOTIONAL' | translate }}</h1>
         </div>
+
+        <ng-container *ngIf="(lastVerse$ | async) as lastVerse">
+          <ng-container *ngIf="(menu$ | async) as menu">
+            <ng-container *ngIf="!!lastVerse">
+              <ion-card class="fade-in-card max-width ion-activatable ripple-parent" (click)="redirect(lastVerse)">
+
+                <ion-card-content class="text-second-color small-text flex-content">
+                  <div><span class="span">{{ 'COMMON.LAST_VERSE' | translate }}: </span> <span>{{ getChaptersNumber(lastVerse, menu)}}</span></div>
+                  <div><ion-icon class="medium-text span" name="eye-outline"></ion-icon> </div>
+                </ion-card-content>
+
+                <ion-ripple-effect></ion-ripple-effect>
+              </ion-card>
+            </ng-container>
+          </ng-container>
+        </ng-container>
 
         <ng-container *ngIf="(verseOfDay$ | async) as verseOfDay">
           <ng-container *ngIf="(status$ | async) as status">
@@ -78,7 +97,9 @@ export class FavouritePage  {
 
   checkObject = checkObject;
   reload$ = new EventEmitter<string>();
+  menu$ = this.store.select(fromBible.getMenu);
   status$ = this.store.select(fromBible.getVerseStatus);
+  lastVerse$ = this.store.select(fromStorage.getStorage);
 
   verseOfDay$ = this.reload$.pipe(
     startWith(''),
@@ -97,7 +118,8 @@ export class FavouritePage  {
 
 
   constructor(
-    private store: Store
+    private store: Store,
+    private router: Router
   ) { }
 
 
@@ -116,5 +138,31 @@ export class FavouritePage  {
     }, 500);
   }
 
+  redirect(verse: string): void{
+    const splitedVerse = verse?.split(' ') || [];
+    const [firstItem = '', secondItem = '', thirdItem = ''] = splitedVerse;
+
+    let verseText = firstItem;
+    let verseNumber = secondItem || '1'
+
+    if(splitedVerse.length === 3){
+      verseText = verseText+' '+secondItem
+      verseNumber = thirdItem || '1'
+    }
+
+    this.router.navigate(['/chapter/'+verseText], {queryParams:{verseNumber}})
+  }
+
+  getChaptersNumber(englisChapter: string, menu:Menu): string{
+    const chapterSplited = (englisChapter || '')?.split(' ');
+    const firstChapterNumber = chapterSplited[chapterSplited?.length -3] || '';
+    const chapter: any = chapterSplited[chapterSplited?.length -2] || '';
+    const number = chapterSplited[chapterSplited?.length -1] || '';
+
+    let property = !!firstChapterNumber ? firstChapterNumber+' '+chapter: chapter
+    return !chapter || !isNaN(chapter)
+          ? chapter +' '+ menu[number] || englisChapter
+          : (menu[property] || chapter) +' '+ number
+  }
 
 }

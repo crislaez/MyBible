@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as BibleActions from '@bible/shared/bible/actions/bible.actions';
 import { Menu } from '@bible/shared/bible/models';
 import * as fromBible from '@bible/shared/bible/selectors/bible.selectors';
@@ -10,6 +10,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
 import { PoperComponent } from '@bible/shared/generics/components/poper.component';
 import { Share } from '@capacitor/share';
+import { StorageActions } from '@bible/shared/storage';
 
 
 @Component({
@@ -26,11 +27,11 @@ import { Share } from '@capacitor/share';
               <div class="header">
                 <div class="header-content" *ngIf="(allPassages$ | async) as allPassages">
                   <ng-container *ngIf="allPassages?.length > 0; else noPassages">
-                    <ion-button class="background-component text-color-white" size="small" slot="start" *ngFor="let passage of allPassages" (click)="getVerses(passage?.passage)" >{{getChaptersNumber(passage?.passage, menu)}} </ion-button>
+                    <ion-button class="background-component text-color-white" size="small" slot="start" *ngFor="let passage of allPassages" (click)="getVerses(passage?.passage)" >{{ getChaptersNumber(passage?.passage, menu) }} </ion-button>
                   </ng-container>
 
                   <ng-template #noPassages>
-                    <ion-button class="background-component text-color-white" size="small" slot="start">{{ 'COMMON.NO_DATA' | translate}} </ion-button>
+
                   </ng-template>
                 </div>
               </div>
@@ -40,12 +41,12 @@ import { Share } from '@capacitor/share';
 
                   <ng-container *ngIf="!!chapter?.text; else noData">
 
-
-
                     <ng-container *ngIf="checkObject(chapter?.text)">
                       <ion-card class="fade-in-card margin-top background-none align-text">
                         <ion-card-header>
+                          <!-- <div> <ion-icon class="medium-text" name="arrow-back-outline" (click)="nextVerse(false, chapter?.passageName)"></ion-icon> </div> -->
                           <ion-card-title class="text-second-color">{{ getFilterName(getChaptersNumber(chapter?.passageName, menu)) }}</ion-card-title>
+                          <!-- <div> <ion-icon class="medium-text" name="arrow-forward-outline" (click)="nextVerse(true, chapter?.passageName)"></ion-icon> </div> -->
                         </ion-card-header>
                       </ion-card>
 
@@ -117,26 +118,31 @@ export class ChaptersPage {
   showButton: boolean = false;
 
   passageName = new EventEmitter();
-  status$ = this.store.pipe(select(fromBible.getChapterStatus));
-  menu$ = this.store.pipe(select(fromBible.getMenu));
+  status$ = this.store.select(fromBible.getChapterStatus);
+  menu$ = this.store.select(fromBible.getMenu);
   reload$ = new EventEmitter<string>();
 
   chapter$: Observable<{text:any, passageName:string}> = combineLatest([
-    this.route.params,
     this.passageName.pipe(startWith(this.route.snapshot.params?.passage +' 1')),
+    this.route.queryParams,
     this.reload$.pipe(startWith(''))
   ]).pipe(
-    filter(([{passage}, passageChange]) => !!passage || !!passageChange),
-    tap(([, passageChange]) => {
-      let passage = passageChange;
+    filter(([passageChange]) => !!passageChange),
+    tap(([passageChange, {verseNumber = null}]) => {
+      let passage = this.getPassage(passageChange, verseNumber);
+
       const oneChapterBook = ['Jude 1', '3 John 1', '2 John 1', 'Philemon 1', 'Obadiah 1'];
+
       if(oneChapterBook?.includes(passageChange))  passage = (passage || '')?.slice(0,-1);
-      this.store.dispatch(BibleActions.loadChapter({passage: passage}))
+
+      this.store.dispatch(BibleActions.loadChapter({passage: passage}));
+      this.store.dispatch(StorageActions.insertStorage({storage:passage})); //guardar en el storage
     }),
-    switchMap(([, passageChange]) =>
+    switchMap(([passageChange, {verseNumber = null}]) =>
       this.store.pipe(select(fromBible.getChapter),
         map(text => {
-          return {text, passageName: passageChange}
+          let passage = this.getPassage(passageChange, verseNumber);
+          return {text, passageName: passage}
         })
       )
     )
@@ -150,6 +156,7 @@ export class ChaptersPage {
   constructor(
     private store: Store,
     private route: ActivatedRoute,
+    private router: Router,
     public popoverController: PopoverController
   ) { }
 
@@ -181,6 +188,7 @@ export class ChaptersPage {
   }
 
   getVerses(passage: string): void{
+    this.router.navigate( ['.'], { relativeTo: this.route });
     this.passageName.next(passage)
   }
 
@@ -192,6 +200,35 @@ export class ChaptersPage {
     const oneChapterBook = ['Judas 1', '3 Juan 1', '2 Juan 1', 'Filemón 1', 'Abdías 1'];
     return oneChapterBook?.includes(passageChange) ? (passageChange || '')?.slice(0,-1) : passageChange;
   }
+
+  getPassage(passageChange: string, number: string): string {
+    if(!!number){
+      const splitedVerse = passageChange?.split(' ') || [];
+      const [firstItem = '', secondItem = ''] = splitedVerse
+      let verseText = firstItem;
+      // let verseNumber = secondItem || '1'
+
+      if(splitedVerse.length === 3){
+        verseText = verseText+' '+secondItem
+        // verseNumber = thirdItem || '1'
+      }
+
+      return verseText+' '+number;
+    }
+
+    return passageChange;
+  }
+
+  // nextVerse(bool: boolean, actualPassage: string): void{
+  //   // this.router.navigate( ['.'], { relativeTo: this.route });
+  //   let splitedActualPassage = (actualPassage || '')?.split('')
+  //   let passage = splitedActualPassage.slice(0, -1)?.join('')
+  //   let nextPage = !!bool ? Number(splitedActualPassage.slice(-1)) + 1 : Number(splitedActualPassage.slice(-1)) - 1
+
+  //   console.log(bool)
+  //   console.log(actualPassage)
+  //   console.log(passage?.trim() +' '+ nextPage)
+  // }
 
   async presentPopover(ev: any, bookName: string, numberVerse: string, verse: string) {
     const popover = await this.popoverController.create({

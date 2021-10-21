@@ -10,7 +10,8 @@
     "DAILY_DEVOTIONAL":"Devocional diario",
     "HOW_IS_HE":"¿Quien es Jesús?",
     "SEND":"Compartir",
-    "CLOSE":"Cerrar"
+    "CLOSE":"Cerrar",
+    "LAST_VERSE":"Último versículo"
   },
   "ERRORS":{
     "ERROR_LOADING":"Error al cargar"
