@@ -32,6 +32,8 @@ export class StorageService {
         if(verse?.includes('Psalm')){
           updateVerse = verse?.includes('Psalms') ? verse : verse?.replace('Psalm','Psalms')
         }
+        updateVerse = updateVerse?.replace('0', '')
+
         this.saveLocalVerse(updateVerse)
         return {code:200}
       })

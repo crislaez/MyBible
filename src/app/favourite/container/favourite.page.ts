@@ -139,18 +139,11 @@ export class FavouritePage  {
   }
 
   redirect(verse: string): void{
-    const splitedVerse = verse?.split(' ') || [];
-    const [firstItem = '', secondItem = '', thirdItem = ''] = splitedVerse;
+    const splitedVerse = verse?.split(' ');
+    const passageName = splitedVerse?.slice(0, -1)?.join(' ');
+    const passageNumber = splitedVerse?.slice(-1)?.join(' ') || '0';
 
-    let verseText = firstItem;
-    let verseNumber = secondItem || '1'
-
-    if(splitedVerse.length === 3){
-      verseText = verseText+' '+secondItem
-      verseNumber = thirdItem || '1'
-    }
-
-    this.router.navigate(['/chapter/'+verseText], {queryParams:{verseNumber}})
+    this.router.navigate( ['/chapter/'+ passageName], { queryParams: {verseNumber: passageNumber}});
   }
 
   getChaptersNumber(englisChapter: string, menu:Menu): string{

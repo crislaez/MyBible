@@ -24,46 +24,51 @@ import { StorageActions } from '@bible/shared/storage';
             <ng-container *ngIf="(status$ | async) as status">
 
               <!-- HEADER  -->
-              <div class="header">
-                <div class="header-content" *ngIf="(allPassages$ | async) as allPassages">
-                  <ng-container *ngIf="allPassages?.length > 0; else noPassages">
-                    <ion-button class="background-component text-color-white" size="small" slot="start" *ngFor="let passage of allPassages" (click)="getVerses(passage?.passage)" >{{ getChaptersNumber(passage?.passage, menu) }} </ion-button>
-                  </ng-container>
-
-                  <ng-template #noPassages>
-
-                  </ng-template>
-                </div>
-              </div>
-
-              <ng-container *ngIf="status !== 'pending'; else loader">
-                <ng-container *ngIf="status !== 'error'; else serverError">
-
-                  <ng-container *ngIf="!!chapter?.text; else noData">
-
-                    <ng-container *ngIf="checkObject(chapter?.text)">
-                      <ion-card class="fade-in-card margin-top background-none align-text">
-                        <ion-card-header>
-                          <!-- <div> <ion-icon class="medium-text" name="arrow-back-outline" (click)="nextVerse(false, chapter?.passageName)"></ion-icon> </div> -->
-                          <ion-card-title class="text-second-color">{{ getFilterName(getChaptersNumber(chapter?.passageName, menu)) }}</ion-card-title>
-                          <!-- <div> <ion-icon class="medium-text" name="arrow-forward-outline" (click)="nextVerse(true, chapter?.passageName)"></ion-icon> </div> -->
-                        </ion-card-header>
-                      </ion-card>
-
-                      <ng-container *ngFor="let numberVerse of getNumberOfVerses(chapter?.text)">
-                        <!-- <ion-card class="fade-in-card ion-activatable ripple-parent" ion-long-press [interval]="400" (pressed)="presentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )">
-                          <ion-card-content class="text-second-color"><span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}</ion-card-content>
-
-                          <ion-ripple-effect></ion-ripple-effect>
-                        </ion-card> -->
-                        <ion-card class="fade-in-card ion-activatable ripple-parent">
-                          <ion-card-content class="text-second-color"><span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}</ion-card-content>
-
-                          <ion-ripple-effect></ion-ripple-effect>
-                        </ion-card>
-                      </ng-container>
+              <ng-container *ngIf="(allPassages$ | async) as allPassages">
+                <div class="header">
+                  <div class="header-content" >
+                    <ng-container *ngIf="allPassages?.length > 0; else noPassages">
+                      <ion-button class="background-component text-color-white" size="small" slot="start" *ngFor="let passage of allPassages" (click)="getVerses(passage?.passage)" >{{ getChaptersNumber(passage?.passage, menu) }} </ion-button>
                     </ng-container>
 
+                    <ng-template #noPassages>
+
+                    </ng-template>
+                  </div>
+                </div>
+
+                <ng-container *ngIf="status !== 'pending'; else loader">
+                  <ng-container *ngIf="status !== 'error'; else serverError">
+
+                    <ng-container *ngIf="!!chapter?.text; else noData">
+
+                      <ng-container *ngIf="checkObject(chapter?.text)">
+                        <ion-card class="fade-in-card margin-top background-none align-text">
+                          <ion-card-header class="flex-content">
+                            <!-- <div [ngClass]="{'disabled':disableButtons(false, allPassages)}"> <ion-icon class="medium-text" name="arrow-back-outline" (click)="nextVerse(false, chapter?.passageName, allPassages)"></ion-icon> </div>
+                            <ion-card-title class="text-second-color">{{ getFilterName(getChaptersNumber(chapter?.passageName, menu)) }}</ion-card-title>
+                            <div [ngClass]="{'disabled':disableButtons(true, allPassages)}"> <ion-icon class="medium-text" name="arrow-forward-outline" (click)="nextVerse(true, chapter?.passageName, allPassages)"></ion-icon> </div> -->
+                            <ion-button fill="clear" [disabled]="chapter?.passageNumber === 1 || chapter?.passageNumber === 0" (click)="nextVerse(false, chapter?.passageName, allPassages)"> <ion-icon class="medium-text" name="arrow-back-outline"></ion-icon> </ion-button>
+                            <ion-card-title class="text-second-color">{{ getFilterName(getChaptersNumber(chapter?.passageName, menu)) }}</ion-card-title>
+                            <ion-button fill="clear" [disabled]="chapter?.passageNumber === allPassages?.length || chapter?.passageNumber === 0" (click)="nextVerse(true, chapter?.passageName, allPassages)"> <ion-icon class="medium-text" name="arrow-forward-outline"></ion-icon> </ion-button>
+                          </ion-card-header>
+                        </ion-card>
+
+                        <ng-container *ngFor="let numberVerse of getNumberOfVerses(chapter?.text)">
+                          <!-- <ion-card class="fade-in-card ion-activatable ripple-parent" ion-long-press [interval]="400" (pressed)="presentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )">
+                            <ion-card-content class="text-second-color"><span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}</ion-card-content>
+
+                            <ion-ripple-effect></ion-ripple-effect>
+                          </ion-card> -->
+                          <ion-card class="fade-in-card ion-activatable ripple-parent">
+                            <ion-card-content class="text-second-color"><span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}</ion-card-content>
+
+                            <ion-ripple-effect></ion-ripple-effect>
+                          </ion-card>
+                        </ng-container>
+                      </ng-container>
+
+                    </ng-container>
                   </ng-container>
                 </ng-container>
               </ng-container>
@@ -122,27 +127,22 @@ export class ChaptersPage {
   menu$ = this.store.select(fromBible.getMenu);
   reload$ = new EventEmitter<string>();
 
-  chapter$: Observable<{text:any, passageName:string}> = combineLatest([
-    this.passageName.pipe(startWith(this.route.snapshot.params?.passage +' 1')),
+  chapter$: Observable<{text:any, passageName:string, passageNumber:number}> = combineLatest([
+    this.route.params,
     this.route.queryParams,
     this.reload$.pipe(startWith(''))
   ]).pipe(
-    filter(([passageChange]) => !!passageChange),
-    tap(([passageChange, {verseNumber = null}]) => {
-      let passage = this.getPassage(passageChange, verseNumber);
-
-      const oneChapterBook = ['Jude 1', '3 John 1', '2 John 1', 'Philemon 1', 'Obadiah 1'];
-
-      if(oneChapterBook?.includes(passageChange))  passage = (passage || '')?.slice(0,-1);
-
-      this.store.dispatch(BibleActions.loadChapter({passage: passage}));
-      this.store.dispatch(StorageActions.insertStorage({storage:passage})); //guardar en el storage
+    filter(([{passage}, {verseNumber}]) => !!passage && !!verseNumber),
+    tap(([{passage}, {verseNumber}]) => {
+      const passaAndVersename = passage+' '+verseNumber;
+      this.store.dispatch(BibleActions.loadChapter({passage: passaAndVersename}));
+      this.store.dispatch(StorageActions.insertStorage({storage:passaAndVersename}));
     }),
-    switchMap(([passageChange, {verseNumber = null}]) =>
+    switchMap(([{passage}, {verseNumber}]) =>
       this.store.pipe(select(fromBible.getChapter),
         map(text => {
-          let passage = this.getPassage(passageChange, verseNumber);
-          return {text, passageName: passage}
+          const passaAndVersename = passage+' '+verseNumber;
+          return {text, passageName: passaAndVersename, passageNumber:Number(verseNumber)}
         })
       )
     )
@@ -188,8 +188,22 @@ export class ChaptersPage {
   }
 
   getVerses(passage: string): void{
-    this.router.navigate( ['.'], { relativeTo: this.route });
-    this.passageName.next(passage)
+    let passageFilter = passage;
+    const oneChapterBook = ['Jude', '3 John', '2 John', 'Philemon', 'Obadiah'];
+
+    if(oneChapterBook?.includes(passage)){
+      passageFilter = passageFilter+' 0'
+    }
+
+    const splitedPassage = passageFilter?.split(' ')
+    let passageName = splitedPassage?.slice(0, -1)?.join(' ')
+    const passageNumber = splitedPassage?.slice(-1)?.join(' ') || '1';
+
+    if(passageName?.includes('Psalm')){
+      passageName = passageName?.includes('Psalms') ? passageName : passageName?.replace('Psalm','Psalms')
+    }
+
+    this.router.navigate( ['/chapter/'+ passageName], { queryParams: {verseNumber: passageNumber}});
   }
 
   getNumberOfVerses(allverses: any): string[]{
@@ -197,38 +211,20 @@ export class ChaptersPage {
   }
 
   getFilterName(passageChange:string): string{
-    const oneChapterBook = ['Judas 1', '3 Juan 1', '2 Juan 1', 'Filemón 1', 'Abdías 1'];
+    const oneChapterBook = ['Judas 0', '3 Juan 0', '2 Juan 0', 'Filemón 0', 'Abdías 0'];
     return oneChapterBook?.includes(passageChange) ? (passageChange || '')?.slice(0,-1) : passageChange;
   }
 
-  getPassage(passageChange: string, number: string): string {
-    if(!!number){
-      const splitedVerse = passageChange?.split(' ') || [];
-      const [firstItem = '', secondItem = ''] = splitedVerse
-      let verseText = firstItem;
-      // let verseNumber = secondItem || '1'
+  nextVerse(bool: boolean, actualPassage: string, allPassages: {passage: string}[]): void{
+    const splitedPassage = actualPassage?.split(' ');
+    const passageName = splitedPassage?.slice(0, -1)?.join(' ');
+    const passageNumber = Number(splitedPassage?.slice(-1)?.join('') ||'');
+    const nextPageNumber = !!bool ? passageNumber + 1 : passageNumber - 1;
 
-      if(splitedVerse.length === 3){
-        verseText = verseText+' '+secondItem
-        // verseNumber = thirdItem || '1'
-      }
-
-      return verseText+' '+number;
+    if(nextPageNumber > 0 && nextPageNumber <= allPassages?.length){
+      this.router.navigate( ['/chapter/'+ passageName], { queryParams: {verseNumber: nextPageNumber}});
     }
-
-    return passageChange;
   }
-
-  // nextVerse(bool: boolean, actualPassage: string): void{
-  //   // this.router.navigate( ['.'], { relativeTo: this.route });
-  //   let splitedActualPassage = (actualPassage || '')?.split('')
-  //   let passage = splitedActualPassage.slice(0, -1)?.join('')
-  //   let nextPage = !!bool ? Number(splitedActualPassage.slice(-1)) + 1 : Number(splitedActualPassage.slice(-1)) - 1
-
-  //   console.log(bool)
-  //   console.log(actualPassage)
-  //   console.log(passage?.trim() +' '+ nextPage)
-  // }
 
   async presentPopover(ev: any, bookName: string, numberVerse: string, verse: string) {
     const popover = await this.popoverController.create({

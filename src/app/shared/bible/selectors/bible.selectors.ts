@@ -55,9 +55,6 @@ export const getChapterStatus = createSelector(
 export const getChaptersByBook = (passageName: string) => createSelector(
   getBooks,
   (getBooks) => {
-    // console.log(passageName)
-    // console.log(getBooks)
-    console.log(getBooks?.find( ({passage}) => passage == passageName)?.chapters)
     return getBooks?.find( ({passage}) => passage == passageName)?.chapters || []
   }
 );

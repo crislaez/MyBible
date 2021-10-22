@@ -16,3 +16,10 @@ ion-card {
   // padding: 0px;
   margin-top: 5px;
 }
+
+.disabled{
+  pointer-events: none;
+  /* for "disabled" effect */
+  opacity: 0.5;
+  background: #CCC;
+}

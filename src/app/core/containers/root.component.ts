@@ -94,9 +94,12 @@ export class RootComponent {
   menuList$: Observable<Book[]> = this.store.pipe(select(fromBible.getBooks));
   menu$: Observable<any> = this.store.pipe(select(fromBible.getMenu))
 
-  constructor(private menu: MenuController, private store: Store, private router: Router) {
-    // this.menu$.subscribe(data => console.log(data))
-  }
+  constructor(
+    private menu: MenuController,
+    private store: Store,
+    private router: Router
+  ) { }
+
 
   open() {
     this.menu.enable(true, 'first');
@@ -104,8 +107,14 @@ export class RootComponent {
   }
 
   redirectTo(passage: string): void{
-    this.router.navigate(['/chapter/'+passage])
-    this.menu.close('first')
+    let verseNumber = '1';
+    const oneChapterBook = ['Jude', '3 John', '2 John', 'Philemon', 'Obadiah'];
+    if(oneChapterBook?.includes(passage)){
+      verseNumber = '0'
+    }
+
+    this.router.navigate(['/chapter/'+passage], {queryParams:{verseNumber}});
+    this.menu.close('first');
   }
 
 }
