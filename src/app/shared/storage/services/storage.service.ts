@@ -28,7 +28,11 @@ export class StorageService {
   saveVerse(verse: string): Observable<any>{
     return from(this.loadVerse()).pipe(
       map(data => {
-        this.saveLocalVerse(verse)
+        let updateVerse = verse;
+        if(verse?.includes('Psalm')){
+          updateVerse = verse?.includes('Psalms') ? verse : verse?.replace('Psalm','Psalms')
+        }
+        this.saveLocalVerse(updateVerse)
         return {code:200}
       })
     )
