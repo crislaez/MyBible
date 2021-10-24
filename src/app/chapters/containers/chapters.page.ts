@@ -30,6 +30,14 @@ import { StorageActions } from '@bible/shared/storage';
                     <ng-container *ngIf="allPassages?.length > 0; else noPassages">
                       <ion-button class="background-component text-color-white" size="small" slot="start" *ngFor="let passage of allPassages" (click)="getVerses(passage?.passage)" >{{ getChaptersNumber(passage?.passage, menu) }} </ion-button>
                     </ng-container>
+<!--
+                    <ion-segment>
+                      <ng-container *ngIf="allPassages?.length > 0; else noPassages">
+                        <ion-segment-button *ngFor="let passage of allPassages" (click)="getVerses(passage?.passage)" value="">
+                        {{ getChaptersNumber(passage?.passage, menu) }}
+                        </ion-segment-button>
+                      </ng-container>
+                    </ion-segment> -->
 
                     <ng-template #noPassages>
 
@@ -45,12 +53,9 @@ import { StorageActions } from '@bible/shared/storage';
                       <ng-container *ngIf="checkObject(chapter?.text)">
                         <ion-card class="fade-in-card margin-top background-none align-text">
                           <ion-card-header class="flex-content">
-                            <!-- <div [ngClass]="{'disabled':disableButtons(false, allPassages)}"> <ion-icon class="medium-text" name="arrow-back-outline" (click)="nextVerse(false, chapter?.passageName, allPassages)"></ion-icon> </div>
+                            <ion-button fill="clear" [disabled]="chapter?.passageNumber === 1 || chapter?.passageNumber === 0" (click)="nextVerse(false, chapter?.passageName, allPassages)"> <ion-icon class="medium-text" name="chevron-back-outline"></ion-icon> </ion-button>
                             <ion-card-title class="text-second-color">{{ getFilterName(getChaptersNumber(chapter?.passageName, menu)) }}</ion-card-title>
-                            <div [ngClass]="{'disabled':disableButtons(true, allPassages)}"> <ion-icon class="medium-text" name="arrow-forward-outline" (click)="nextVerse(true, chapter?.passageName, allPassages)"></ion-icon> </div> -->
-                            <ion-button fill="clear" [disabled]="chapter?.passageNumber === 1 || chapter?.passageNumber === 0" (click)="nextVerse(false, chapter?.passageName, allPassages)"> <ion-icon class="medium-text" name="arrow-back-outline"></ion-icon> </ion-button>
-                            <ion-card-title class="text-second-color">{{ getFilterName(getChaptersNumber(chapter?.passageName, menu)) }}</ion-card-title>
-                            <ion-button fill="clear" [disabled]="chapter?.passageNumber === allPassages?.length || chapter?.passageNumber === 0" (click)="nextVerse(true, chapter?.passageName, allPassages)"> <ion-icon class="medium-text" name="arrow-forward-outline"></ion-icon> </ion-button>
+                            <ion-button fill="clear" [disabled]="chapter?.passageNumber === allPassages?.length || chapter?.passageNumber === 0" (click)="nextVerse(true, chapter?.passageName, allPassages)"> <ion-icon class="medium-text" name="chevron-forward-outline"></ion-icon> </ion-button>
                           </ion-card-header>
                         </ion-card>
 

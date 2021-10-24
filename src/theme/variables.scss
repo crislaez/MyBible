@@ -344,7 +344,7 @@ ion-searchbar {
 
 .header{
   width: 100%;
-  margin-top: 70px;
+  margin-top: 50px;
   min-height: 50px;
   text-align: center;
   display: flex;
@@ -416,14 +416,26 @@ ion-searchbar {
 
   ion-button {
     box-shadow: none;
+    height: 40px;
   }
 
 }
+
+// ion-segment{
+//   display: flex;
+//   flex-direction: row;
+//   // min-width: 100%;
+//   width: 50%;
+//   width: auto;
+//   overflow-x: scroll;
+//   background: #EEEEEE;
+// }
 
 .fade-in-card {
   animation: fadeIn 2s;
   animation: fadeInUp 0.4s;
 }
+
 @keyframes fadeIn {
   0% {opacity:0;}
   100% {opacity:1;}
