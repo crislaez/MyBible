@@ -29,12 +29,21 @@ export class StorageService {
     return from(this.loadVerse()).pipe(
       map(data => {
         let updateVerse = verse;
+
         if(verse?.includes('Psalm')){
           updateVerse = verse?.includes('Psalms') ? verse : verse?.replace('Psalm','Psalms')
         }
-        updateVerse = updateVerse?.replace('0', '')
 
-        this.saveLocalVerse(updateVerse)
+        const splitedUpdateVerse = updateVerse?.split(' ')
+        const passageName =  splitedUpdateVerse.slice(0, -1)?.join(' ');
+        let passageNumber = splitedUpdateVerse.slice(-1)?.join(' ');
+
+        if(passageNumber?.length === 1 && passageNumber?.includes('0')){
+          passageNumber = passageNumber?.replace('0', '')
+        }
+        const savePassage = passageName +' '+passageNumber
+
+        this.saveLocalVerse(savePassage)
         return {code:200}
       })
     )
