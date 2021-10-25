@@ -67,14 +67,14 @@ import { Observable } from 'rxjs';
           <!-- <ion-label>Quien es El</ion-label> -->
         </ion-tab-button>
 
-        <!-- <ion-tab-button [routerLink]="['video']">
-          <ion-icon name="videocam-outline"></ion-icon>
-          <ion-label>Inicio</ion-label>
-        </ion-tab-button> -->
-
         <ion-tab-button [routerLink]="['favourite']">
           <ion-icon class="text-color-white" name="bookmark-outline"></ion-icon>
           <!-- <ion-label>Favorito</ion-label> -->
+        </ion-tab-button>
+
+        <ion-tab-button [routerLink]="['discipleship']">
+          <ion-icon  class="text-color-white" name="reader-outline"></ion-icon>
+          <!-- <ion-label>Inicio</ion-label> -->
         </ion-tab-button>
 
         <ion-tab-button [routerLink]="['guide']">

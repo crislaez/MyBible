@@ -19,6 +19,10 @@ const routes: Routes = [
     canActivate: [LangGuard],
   },
   {
+    path: 'discipleship',
+    loadChildren: () => import('./discipleship/discipleship.module').then( m => m.DiscipleshipPageModule)
+  },
+  {
     path: 'guide',
     loadChildren: () => import('./guide/guide.module').then( m => m.GuidePageModule),
     canActivate: [LangGuard],
@@ -28,6 +32,7 @@ const routes: Routes = [
     redirectTo: 'favourite',
     pathMatch: 'full',
   }
+
 ];
 @NgModule({
   imports: [
