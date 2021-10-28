@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, ViewChild } from '@angular/core';
-import { checkObject, gotToTop } from '@bible/shared/shared/utils/utils';
+import { DiscipleshipActions, fromDiscipleship } from '@bible/shared/discipleship';
+import { checkObject, gotToTop, trackById } from '@bible/shared/shared/utils/utils';
 import { IonContent } from '@ionic/angular';
+import { Store, select } from '@ngrx/store';
+import { startWith, switchMap, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -9,14 +12,55 @@ import { IonContent } from '@ionic/angular';
     <ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="logScrolling($any($event))">
       <div class="container">
 
-        <ng-container>
+        <div class="header fade-in-card">
+          <h1>{{ 'COMMON.DISCIPLESHIPS' | translate }}</h1>
+        </div>
+
+
+        <ng-container *ngFor="let item of menu; let i = index; trackBy: trackById">
+          <details>
+            <summary>
+              <ion-card class="fade-in-card margin-top  align-text" (click)="searchVerses(item?.text)" >
+                <ion-card-header class="flex-content span">
+                  {{ item?.label | translate }}
+                </ion-card-header>
+              </ion-card>
+            </summary>
+
+            <div>
+              <ng-container *ngIf="(verses$ | async) as verses">
+                <ng-container *ngIf="(status$ | async) as status">
+                  <ng-container *ngIf="status !== 'pending'; else loader">
+                    <ng-container *ngIf="status !== 'error'">
+
+                      <ng-container *ngFor="let verse of verses">
+                      <!-- fade-in-card -->
+                        <ion-card class="margin-top  align-text summary-items">
+                          <ion-card-header class="span">
+                            {{ verse?.split('|')[0] }}
+                          </ion-card-header>
+
+                          <ion-card-content>
+                          {{ verse?.split('|')[1] }}
+                          </ion-card-content>
+                        </ion-card>
+                      </ng-container>
+
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+          </details>
+
         </ng-container>
 
+        <!--  -->
 
         <!-- REFRESH -->
-        <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
           <ion-refresher-content></ion-refresher-content>
-        </ion-refresher>
+        </ion-refresher> -->
 
         <!-- IS ERROR -->
         <ng-template #serverError>
@@ -54,11 +98,60 @@ export class DiscipleshipPage {
   @ViewChild(IonContent, {static: true}) content: IonContent;
   checkObject = checkObject;
   gotToTop = gotToTop;
+  trackById = trackById;
   showButton: boolean = false;
-  reload$ = new EventEmitter<string>();
+  search$ = new EventEmitter<string>();
+
+  menu:{id:number, label:string, text:string}[] = [
+    {
+      id:1,
+      label: 'COMMON.HOPE',
+      text: 'hope'
+    },
+    {
+      id:2,
+      label: 'COMMON.LOVE',
+      text: 'love'
+    },
+    {
+      id:3,
+      label: 'COMMON.SORRY',
+      text: 'sorry'
+    },
+    {
+      id:4,
+      label: 'COMMON.FAMILY',
+      text: 'family'
+    },
+    {
+      id:5,
+      label: 'COMMON.MARRIAGE',
+      text: 'marriage'
+    },
+    {
+      id:6,
+      label: 'COMMON.SALVATION',
+      text: 'salvation'
+    }
+  ];
+
+  status$ = this.store.select(fromDiscipleship.getStatus);
+
+  verses$ = this.search$.pipe(
+    startWith(this.menu[0]?.text),
+    tap((name) => {
+      this.store.dispatch(DiscipleshipActions.loadDiscipleship({name}))
+    }),
+    switchMap(() =>
+      this.store.select(fromDiscipleship.getDiscipleship)
+    )
+    // ,tap(data => console.log(data))
+  );
 
 
-  constructor() { }
+  constructor (
+    private store: Store
+  ) { }
 
 
   // SCROLL EVENT
@@ -69,10 +162,14 @@ export class DiscipleshipPage {
 
   doRefresh(event) {
     setTimeout(() => {
-      this.reload$.next('')
+      this.search$.next('')
 
       event.target.complete();
     }, 500);
+  }
+
+  searchVerses(verse): void{
+    this.search$.next(verse)
   }
 
 }

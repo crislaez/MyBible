@@ -8,6 +8,9 @@ export const gotToTop = (content: IonContent): void => {
   content.scrollToTop(500);
 }
 
+export const trackById = (_: number, item: any): number => {
+  return item?.id;
+}
 
 export enum EntityStatus {
   Initial = 'initial',

@@ -11,7 +11,14 @@
     "HOW_IS_HE":"¿Quien es Jesús?",
     "SEND":"Compartir",
     "CLOSE":"Cerrar",
-    "LAST_VERSE":"Último versículo"
+    "LAST_VERSE":"Último versículo",
+    "DISCIPLESHIPS":"Discipulados",
+    "HOPE":"Esperanza",
+    "LOVE":"Amor",
+    "SORRY":"Perdón",
+    "FAMILY":"Familia",
+    "MARRIAGE":"Matrimonio",
+    "SALVATION":"Salvación"
   },
   "ERRORS":{
     "ERROR_LOADING":"Error al cargar"

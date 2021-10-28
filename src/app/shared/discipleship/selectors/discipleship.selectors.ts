@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromDiscipleship from '../reducers/discipleship.reducer';
 
 export const selectBibleState = createFeatureSelector<fromDiscipleship.State>(
-  fromDiscipleship.bibleFeatureKey
+  fromDiscipleship.discipleshipFeatureKey
 );
 
 

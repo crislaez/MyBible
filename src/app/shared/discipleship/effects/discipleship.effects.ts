@@ -17,7 +17,7 @@ export class DiscipleshipEffects {
       ofType(DiscipleshipActions.loadDiscipleship),
       switchMap( ({name}) =>
         this._discipleship.getDiscipleship(name).pipe(
-          map( ({discipleship}): any => DiscipleshipActions.saveDiscipleship({ discipleship, error:undefined, status: EntityStatus.Loaded})),
+          map( (discipleship): any => DiscipleshipActions.saveDiscipleship({ discipleship, error:undefined, status: EntityStatus.Loaded})),
           catchError((error) => of(
             DiscipleshipActions.saveDiscipleship({ discipleship: [], error, status: EntityStatus.Loaded}),
             NotificationActions.notificationFailure({message:'ERRORS.ERROR_LOADING'})

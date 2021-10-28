@@ -11,6 +11,8 @@ Mi Biblia SBRV60 es una aplicación hecha en Ionic (Angular, TypeScript, Sass/Cs
 <img src="https://github.com/crislaez/MyBible/blob/master/src/assets/images/foto_proyecto_4.PNG" />
 <hr>
 <img src="https://github.com/crislaez/MyBible/blob/master/src/assets/images/foto_proyecto_5.PNG" />
+<hr>
+<img src="https://github.com/crislaez/MyBible/blob/master/src/assets/images/foto_proyecto_6.PNG" />
 
 ### Que hace el proyecto
 
