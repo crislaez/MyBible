@@ -35,7 +35,7 @@ import { startWith, switchMap, tap } from 'rxjs/operators';
 
                       <ng-container *ngFor="let verse of verses">
                       <!-- fade-in-card -->
-                        <ion-card class="margin-top  align-text summary-items">
+                        <ion-card class="margin-top align-text summary-items">
                           <ion-card-header class="span">
                             {{ verse?.split('|')[0] }}
                           </ion-card-header>
@@ -105,33 +105,43 @@ export class DiscipleshipPage {
   menu:{id:number, label:string, text:string}[] = [
     {
       id:1,
+      label: 'COMMON.FOLLOW_LORD',
+      text: 'follow'
+    },
+    {
+      id:2,
       label: 'COMMON.HOPE',
       text: 'hope'
     },
     {
-      id:2,
+      id:3,
       label: 'COMMON.LOVE',
       text: 'love'
     },
     {
-      id:3,
+      id:4,
       label: 'COMMON.SORRY',
       text: 'sorry'
     },
     {
-      id:4,
+      id:5,
       label: 'COMMON.FAMILY',
       text: 'family'
     },
     {
-      id:5,
+      id:6,
       label: 'COMMON.MARRIAGE',
       text: 'marriage'
     },
     {
-      id:6,
+      id:7,
       label: 'COMMON.SALVATION',
       text: 'salvation'
+    },
+    {
+      id:8,
+      label: 'COMMON.FINANCE',
+      text: 'finanzas'
     }
   ];
 

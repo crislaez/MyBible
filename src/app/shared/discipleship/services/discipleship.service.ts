@@ -8,6 +8,23 @@ import { Observable, of } from 'rxjs';
 export class DiscipleshipService {
 
   ALLVERSES = {
+    'follow':[
+      "Deuteronomio 5:33 | Andad en todo el camino que Jehová vuestro Dios os ha mandado, para que viváis y os vaya bien, y tengáis largos días en la tierra que habéis de poseer.",
+      "Deuteronomio 31:8 | Y Jehová va delante de ti; él estará contigo, no te dejará, ni te desamparará; no temas ni te intimides.",
+      "Salmo 119:133 | Ordena mis pasos con tu palabra, Y ninguna iniquidad se enseñoree de mí.",
+      "Juan 8:12 | Otra vez Jesús les habló, diciendo: Yo soy la luz del mundo; el que me sigue, no andará en tinieblas, sino que tendrá la luz de la vida.",
+      "2 Tesalonicenses 3:5 |  el Señor encamine vuestros corazones al amor de Dios, y a la paciencia de Cristo.",
+      "Deuteronomio 13:4 | En pos de Jehová vuestro Dios andaréis; a él temeréis, guardaréis sus mandamientos y escucharéis su voz, a él serviréis, y a él seguiréis.",
+      "Mateo 10:38 | Y el que no toma su cruz y sigue en pos de mí, no es digno de mí.",
+      "Marcos 8:34 | Y llamando a la gente y a sus discípulos, les dijo: Si alguno quiere venir en pos de mí, niéguese a sí mismo, y tome su cruz, y sígame.",
+      "Gálatas 5:25 | Si vivimos por el Espíritu, andemos también por el Espíritu.",
+      "Efesios 5:1 | Sed, pues, imitadores de Dios como hijos amados.",
+      "Juan 12:26 | Si alguno me sirve, sígame; y donde yo estuviere, allí también estará mi servidor. Si alguno me sirviere, mi Padre le honrará",
+      "Salmo 128:1 | Bienaventurado todo aquel que teme a Jehová, Que anda en sus caminos.",
+      "1 Pedro 2:21 | Pues para esto fuisteis llamados; porque también Cristo padeció por nosotros, dejándonos ejemplo, para que sigáis sus pisadas.",
+      "Salmo 37:23 | Por Jehová son ordenados los pasos del hombre, Y él aprueba su camino.",
+      "Efesios 2:10 | Porque somos hechura suya, creados en Cristo Jesús para buenas obras, las cuales Dios preparó de antemano para que anduviésemos en ellas."
+    ],
     'hope':[
       "Jeremías 29:11 | orque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.",
       "Salmo 42:11 | ¿Por qué te abates, oh alma mía, Y por qué te turbas dentro de mí? Espera en Dios; porque aún he de alabarle, Salvación mía y Dios mío.",
@@ -105,6 +122,23 @@ export class DiscipleshipService {
       'Mateo 7:13-14 | Entrad por la puerta estrecha; porque ancha es la puerta, y espacioso el camino que lleva a la perdición, y muchos son los que entran por ella; porque estrecha es la puerta, y angosto el camino que lleva a la vida, y pocos son los que la hallan.',
       '1 Pedro 1:8-9 | A quien amáis sin haberle visto, en quien creyendo, aunque ahora no lo veáis, os alegráis con gozo inefable y glorioso; obteniendo el fin de vuestra fe, que es la salvación de vuestras almas.',
       'Hebreos 9:28 | Así también Cristo fue ofrecido una sola vez para llevar los pecados de muchos; y aparecerá por segunda vez, sin relación con el pecado, para salvar a los que le esperan.',
+    ],
+    'finanzas':[
+      'Hebreos 13:5 | Sean vuestras costumbres sin avaricia, contentos con lo que tenéis ahora; porque él dijo: No te desampararé, ni te dejaré.',
+      'Proverbios 13:11 | Las riquezas de vanidad disminuirán; Pero el que recoge con mano laboriosa las aumenta.',
+      '1 Timoteo 6:9 | Porque los que quieren enriquecerse caen en tentación y lazo, y en muchas codicias necias y dañosas, que hunden a los hombres en destrucción y perdición.',
+      'Proverbios 23:4 | No te afanes por hacerte rico; Sé prudente, y desiste.',
+      'Proverbios 10:22 | La bendición de Jehová es la que enriquece, Y no añade tristeza con ella.',
+      'Eclesiastés 5:10 | El que ama el dinero, no se saciará de dinero; y el que ama el mucho tener, no sacará fruto. También esto es vanidad.',
+      'Proverbios 3:9 | Honra a Jehová con tus bienes, Y con las primicias de todos tus frutos.',
+      'Proverbios 15:16 | Mejor es lo poco con el temor de Jehová, Que el gran tesoro donde hay turbación.',
+      'Lucas 12:15 | Y les dijo: Mirad, y guardaos de toda avaricia; porque la vida del hombre no consiste en la abundancia de los bienes que posee.',
+      'Mateo 6:21 | Porque donde esté vuestro tesoro, allí estará también vuestro corazón.',
+      'Romanos 13:7 | Pagad a todos lo que debéis: al que tributo, tributo; al que impuesto, impuesto; al que respeto, respeto; al que honra, honra.',
+      'Proverbios 16:16 | Mejor es adquirir sabiduría que oro preciado; Y adquirir inteligencia vale más que la plata.',
+      '1 Crónicas 29:14 | Porque ¿quién soy yo, y quién es mi pueblo, para que pudiésemos ofrecer voluntariamente cosas semejantes? Pues todo es tuyo, y de lo recibido de tu mano te damos.',
+      '1 Timoteo 6:17 | A los ricos de este siglo manda que no sean altivos, ni pongan la esperanza en las riquezas, las cuales son inciertas, sino en el Dios vivo, que nos da todas las cosas en abundancia para que las disfrutemos.',
+      'Mateo 25:21 | Vanidad y palabra mentirosa aparta de mí; No me des pobreza ni riquezas; Manténme del pan necesario.'
     ]
   };
 

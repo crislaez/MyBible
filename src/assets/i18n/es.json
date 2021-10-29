@@ -13,12 +13,14 @@
     "CLOSE":"Cerrar",
     "LAST_VERSE":"Último versículo",
     "DISCIPLESHIPS":"Discipulados",
+    "FOLLOW_LORD":"Sigue al Señor",
     "HOPE":"Esperanza",
     "LOVE":"Amor",
     "SORRY":"Perdón",
     "FAMILY":"Familia",
     "MARRIAGE":"Matrimonio",
-    "SALVATION":"Salvación"
+    "SALVATION":"Salvación",
+    "FINANCE":"Finanzas"
   },
   "ERRORS":{
     "ERROR_LOADING":"Error al cargar"

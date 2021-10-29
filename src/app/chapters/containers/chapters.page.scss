@@ -15,6 +15,11 @@ ion-card {
   width: 90%;
   // padding: 0px;
   margin-top: 5px;
+
+  ion-icon{
+    color: black;
+  }
+
 }
 
 .disabled{
@@ -24,6 +29,3 @@ ion-card {
   background: #CCC;
 }
 
-ion-icon{
-  color: black;
-}
