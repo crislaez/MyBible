@@ -15,8 +15,8 @@ import { Observable } from 'rxjs';
     <!-- HEDAER  -->
     <ion-header >
       <ion-toolbar class="background-component">
-         <ion-button fill="clear" size="small" color="ligth" slot="start" (click)="open()">
-            <ion-menu-button color="light"></ion-menu-button>
+         <ion-button  fill="clear" size="small" slot="start" (click)="open()">
+            <ion-menu-button class="text-color-white"></ion-menu-button>
           </ion-button>
           <ion-title class="text-color-white">{{ 'COMMON.TITLE' | translate }}</ion-title>
       </ion-toolbar>

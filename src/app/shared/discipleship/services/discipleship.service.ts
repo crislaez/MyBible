@@ -26,7 +26,7 @@ export class DiscipleshipService {
       "Efesios 2:10 | Porque somos hechura suya, creados en Cristo Jesús para buenas obras, las cuales Dios preparó de antemano para que anduviésemos en ellas."
     ],
     'hope':[
-      "Jeremías 29:11 | orque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.",
+      "Jeremías 29:11 | Porque yo sé los pensamientos que tengo acerca de vosotros, dice Jehová, pensamientos de paz, y no de mal, para daros el fin que esperáis.",
       "Salmo 42:11 | ¿Por qué te abates, oh alma mía, Y por qué te turbas dentro de mí? Espera en Dios; porque aún he de alabarle, Salvación mía y Dios mío.",
       "Isaías 40:3 | Pero los que esperan a Jehová tendrán nuevas fuerzas; levantarán alas como las águilas; correrán, y no se cansarán; caminarán, y no se fatigarán.",
       "Salmo 121:7-8 | Jehová te guardará de todo mal; El guardará tu alma. Jehová guardará tu salida y tu entrada Desde ahora y para siempre.",
