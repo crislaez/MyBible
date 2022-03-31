@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PoperComponent } from '@bible/shared-ui/generics/components/poper.component';
 import * as BibleActions from '@bible/shared/bible/actions/bible.actions';
 import { Menu } from '@bible/shared/bible/models';
 import * as fromBible from '@bible/shared/bible/selectors/bible.selectors';
 import { checkObject, gotToTop } from '@bible/shared/shared/utils/utils';
+import { StorageActions } from '@bible/shared/storage';
+import { Share } from '@capacitor/share';
 import { IonContent, PopoverController } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
-import { PoperComponent } from '@bible/shared/generics/components/poper.component';
-import { Share } from '@capacitor/share';
-import { StorageActions } from '@bible/shared/storage';
 
 
 @Component({
@@ -65,7 +65,7 @@ import { StorageActions } from '@bible/shared/storage';
 
                             <ion-ripple-effect></ion-ripple-effect>
                           </ion-card> -->
-                          <ion-card class="fade-in-card ion-activatable ripple-parent">
+                          <ion-card class="fade-in-card ion-activatable ripple-parent components-color-ligth">
                             <ion-card-content class="text-second-color"><span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}</ion-card-content>
 
                             <ion-ripple-effect></ion-ripple-effect>
@@ -91,24 +91,16 @@ import { StorageActions } from '@bible/shared/storage';
 
         <!-- IS ERROR -->
         <ng-template #serverError>
-          <div class="error-serve">
-            <div>
-              <span><ion-icon class="text-second-color big-size" name="cloud-offline-outline"></ion-icon></span>
-              <br>
-              <span class="text-second-color">{{'COMMON.ERROR' | translate}}</span>
-            </div>
-          </div>
+          <app-no-data [title]="'COMMON.ERROR'" [image]="'assets/images/error.png'" [top]="'0vh'"></app-no-data>
         </ng-template>
 
         <!-- IS NO DATA  -->
         <ng-template #noData>
-          <div class="error-serve">
-            <span class="text-second-color">{{'COMMON.NO_DATA' | translate}}</span>
-          </div>
+          <app-no-data [title]="'COMMON.NO_DATA'" [image]="'assets/images/empty.png'" [top]="'0vh'"></app-no-data>
         </ng-template>
 
         <ng-template #loader>
-          <ion-spinner class="color-component"></ion-spinner>
+          <app-spinner ></app-spinner>
         </ng-template>
       </div>
 

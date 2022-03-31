@@ -23,7 +23,7 @@ import { map, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
         <ng-container *ngIf="(lastVerse$ | async) as lastVerse">
           <ng-container *ngIf="(menu$ | async) as menu">
             <ng-container *ngIf="!!lastVerse">
-              <ion-card class="fade-in-card max-width ion-activatable ripple-parent" (click)="redirect(lastVerse)">
+              <ion-card class="fade-in-card max-width ion-activatable ripple-parent components-color-ligth" (click)="redirect(lastVerse)">
 
                 <ion-card-content class="text-second-color small-text flex-content">
                   <div><span class="span">{{ 'COMMON.LAST_VERSE' | translate }}: </span> <span>{{ getChaptersNumber(lastVerse, menu)}}</span></div>
@@ -42,7 +42,7 @@ import { map, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
               <ng-container *ngIf="status !== 'error'; else serverError">
                 <ng-container *ngIf="checkObject(verseOfDay); else noData">
 
-                  <ion-card class="fade-in-card">
+                  <ion-card class="fade-in-card components-color-ligth">
                     <ion-card-header>
                       <ion-card-title class="text-second-color">{{verseOfDay?.title}}</ion-card-title>
                     </ion-card-header>
@@ -62,32 +62,21 @@ import { map, startWith, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 
         <!-- IS ERROR -->
         <ng-template #serverError>
-          <div class="error-serve">
-            <div>
-              <span><ion-icon class="text-second-color big-size" name="cloud-offline-outline"></ion-icon></span>
-              <br>
-              <span class="text-second-color">{{'COMMON.ERROR' | translate}}</span>
-            </div>
-          </div>
+          <app-no-data [title]="'COMMON.ERROR'" [image]="'assets/images/error.png'" [top]="'0vh'"></app-no-data>
         </ng-template>
 
         <!-- IS NO DATA  -->
         <ng-template #noData>
-          <div class="error-serve">
-            <span class="text-second-color">{{'COMMON.NO_DATA' | translate}}</span>
-          </div>
+          <app-no-data [title]="'COMMON.NO_DATA'" [image]="'assets/images/empty.png'" [top]="'0vh'"></app-no-data>
         </ng-template>
 
         <!-- LOADER  -->
         <ng-template #loader>
-          <ion-spinner class="color-component"></ion-spinner>
+          <app-spinner ></app-spinner>
         </ng-template>
 
       </div>
 
-      <!-- <ion-fab *ngIf="showButton" vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button class="background-component text-color-white" (click)="gotToTop(content)"> <ion-icon name="arrow-up-circle-outline"></ion-icon></ion-fab-button>
-      </ion-fab> -->
     </ion-content>
   `,
   styleUrls: ['./favourite.page.scss'],
@@ -107,7 +96,7 @@ export class FavouritePage  {
       this.store.select(fromBible.getVersesOfDay),
     ),
     tap(([,verses]) => {
-      this.store.dispatch(BibleActions.loadVerseOfDay({passage: (verses[this.getNow()] as any)?.verse}))
+      this.store.dispatch(BibleActions.loadVerseOfDay({passage: (verses[this.getNow()-1] as any)?.verse}))
     }),
     switchMap(([,verses]) =>
       this.store.select(fromBible.getVerseOfDay).pipe(
@@ -133,7 +122,6 @@ export class FavouritePage  {
   doRefresh(event) {
     setTimeout(() => {
       this.reload$.next('')
-
       event.target.complete();
     }, 500);
   }

@@ -20,7 +20,7 @@ import { startWith, switchMap, tap } from 'rxjs/operators';
         <ng-container *ngFor="let item of menu; let i = index; trackBy: trackById">
           <details>
             <summary>
-              <ion-card class="fade-in-card margin-top  align-text" (click)="searchVerses(item?.text)" >
+              <ion-card class="fade-in-card margin-top align-text components-color-ligth" (click)="searchVerses(item?.text)" >
                 <ion-card-header class="flex-content span">
                   {{ item?.label | translate }}
                 </ion-card-header>
@@ -35,7 +35,7 @@ import { startWith, switchMap, tap } from 'rxjs/operators';
 
                       <ng-container *ngFor="let verse of verses">
                       <!-- fade-in-card -->
-                        <ion-card class="margin-top align-text summary-items">
+                        <ion-card class="margin-top align-text summary-items components-color-ligth">
                           <ion-card-header class="span">
                             {{ verse?.split('|')[0] }}
                           </ion-card-header>
@@ -64,24 +64,16 @@ import { startWith, switchMap, tap } from 'rxjs/operators';
 
         <!-- IS ERROR -->
         <ng-template #serverError>
-          <div class="error-serve">
-            <div>
-              <span><ion-icon class="text-second-color big-size" name="cloud-offline-outline"></ion-icon></span>
-              <br>
-              <span class="text-second-color">{{'COMMON.ERROR' | translate}}</span>
-            </div>
-          </div>
+          <app-no-data [title]="'COMMON.ERROR'" [image]="'assets/images/error.png'" [top]="'0vh'"></app-no-data>
         </ng-template>
 
         <!-- IS NO DATA  -->
         <ng-template #noData>
-          <div class="error-serve">
-            <span class="text-second-color">{{'COMMON.NO_DATA' | translate}}</span>
-          </div>
+          <app-no-data [title]="'COMMON.NO_DATA'" [image]="'assets/images/empty.png'" [top]="'0vh'"></app-no-data>
         </ng-template>
 
         <ng-template #loader>
-          <ion-spinner class="color-component"></ion-spinner>
+          <app-spinner ></app-spinner>
         </ng-template>
       </div>
 

@@ -1,1 +1,13 @@
-@import '../../../theme/variables'
+@import '../../../theme/variables';
+
+
+ion-tab-button, ion-icon{
+  transition: all 0.1s ease-out;
+}
+
+.active-class {
+  ion-icon {
+    font-size: 40px;
+  }
+  color: #4984C3;
+}

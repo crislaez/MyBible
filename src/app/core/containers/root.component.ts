@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import * as fromBible from '@bible/shared/bible/selectors/bible.selectors';
 import { Book } from '@bible/shared/bible/models';
 import { checkObject } from '@bible/shared/shared/utils/utils';
 import { MenuController } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { filter, map, shareReplay } from 'rxjs/operators';
 
 
 @Component({
   selector: 'app-root',
   template:`
   <ion-app>
+
     <!-- HEDAER  -->
     <ion-header >
       <ion-toolbar class="background-component">
@@ -52,7 +54,6 @@ import { Observable } from 'rxjs';
         <ng-template #noItem>
             <ion-item >{{ 'COMMON.NO_DATA' | translate }}</ion-item>
         </ng-template>
-
       </ion-content>
     </ion-menu>
 
@@ -60,26 +61,10 @@ import { Observable } from 'rxjs';
     <ion-router-outlet id="main"></ion-router-outlet>
 
     <!-- TAB FOOTER  -->
-    <ion-tabs >
+    <ion-tabs  *ngIf="currentSection$ | async as currentSection">
       <ion-tab-bar class="background-component" slot="bottom">
-        <ion-tab-button [routerLink]="['how-is-he']">
-          <ion-icon class="text-color-white" name="heart-outline"></ion-icon>
-          <!-- <ion-label>Quien es El</ion-label> -->
-        </ion-tab-button>
-
-        <ion-tab-button [routerLink]="['favourite']">
-          <ion-icon class="text-color-white" name="bookmark-outline"></ion-icon>
-          <!-- <ion-label>Favorito</ion-label> -->
-        </ion-tab-button>
-
-        <ion-tab-button [routerLink]="['discipleship']">
-          <ion-icon  class="text-color-white" name="reader-outline"></ion-icon>
-          <!-- <ion-label>Inicio</ion-label> -->
-        </ion-tab-button>
-
-        <ion-tab-button [routerLink]="['guide']">
-          <ion-icon class="text-color-white" name="search-outline"></ion-icon>
-          <!-- <ion-label>Buscar</ion-label> -->
+        <ion-tab-button *ngFor="let item of footerList" [ngClass]="{'active-class': [item?.link]?.includes(currentSection?.route)}" class="text-color-light" [routerLink]="[item?.link]">
+          <ion-icon [name]="item?.icon"></ion-icon>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
@@ -92,7 +77,25 @@ export class RootComponent {
 
   checkObject = checkObject;
   menuList$: Observable<Book[]> = this.store.pipe(select(fromBible.getBooks));
-  menu$: Observable<any> = this.store.pipe(select(fromBible.getMenu))
+  menu$: Observable<any> = this.store.pipe(select(fromBible.getMenu));
+
+  currentSection$: Observable<{route:string}> = this.router.events.pipe(
+    filter((event: any) => event instanceof NavigationStart),
+    map((event: NavigationEnd) => {
+      const { url = ''} = event || {}
+      let route = url?.split('/')[1];
+      return {route:route || 'home'};
+    })
+    ,shareReplay(1)
+  );
+
+  footerList = [
+    {id:1, link:'how-is-he', icon:'heart-outline'},
+    {id:2, link:'favourite', icon:'bookmark-outline'},
+    {id:3, link:'discipleship', icon:'reader-outline'},
+    {id:4, link:'guide', icon:'search-outline'}
+  ]
+
 
   constructor(
     private menu: MenuController,

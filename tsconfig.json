@@ -16,6 +16,7 @@
     "paths":{
       "@bible/core/*": ["./src/app/core/*"],
       "@bible/shared/*": ["./src/app/shared/*"],
+      "@bible/shared-ui/*": ["./src/app/shared-ui/*"],
     }
   },
   "angularCompilerOptions": {

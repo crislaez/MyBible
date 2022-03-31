@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BibleModule } from '@bible/shared/bible/bible.module';
-import { GenericsModule } from '@bible/shared/generics/generics.module';
+import { GenericsModule } from '@bible/shared-ui/generics/generics.module';
 import { StorageModule } from '@bible/shared/storage/storage.module';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';

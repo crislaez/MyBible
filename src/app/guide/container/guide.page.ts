@@ -18,7 +18,7 @@ import { map, startWith, switchMap, tap } from 'rxjs/operators';
         <!-- HEADER  -->
         <div class="header fade-in-card">
           <form (submit)="searchSubmit($event)">
-            <ion-searchbar color="light" [placeholder]=" 'COMMON.SEARCH' | translate" [formControl]="search" (ionClear)="clearSearch($event)"></ion-searchbar>
+            <ion-searchbar [placeholder]=" 'COMMON.SEARCH' | translate" [formControl]="search" (ionClear)="clearSearch($event)"></ion-searchbar>
           </form>
         </div>
 
@@ -31,7 +31,7 @@ import { map, startWith, switchMap, tap } from 'rxjs/operators';
                 <ng-container *ngIf="searchData?.search !== '400' && searchData?.text !=='400' ; else noSearch">
                   <ng-container *ngIf="!!searchData?.text; else noData">
 
-                    <ion-card class="fade-in-card">
+                    <ion-card class="fade-in-card components-color-ligth">
                       <ion-card-header>
                         <ion-card-title class="text-second-color">{{searchData?.search}}</ion-card-title>
                       </ion-card-header>
@@ -54,31 +54,21 @@ import { map, startWith, switchMap, tap } from 'rxjs/operators';
 
         <!-- IS ERROR -->
         <ng-template #serverError>
-          <div class="error-serve">
-            <div>
-              <span><ion-icon class="text-second-color big-size" name="cloud-offline-outline"></ion-icon></span>
-              <br>
-              <span class="text-second-color">{{'COMMON.ERROR' | translate}}</span>
-            </div>
-          </div>
+          <app-no-data [title]="'COMMON.ERROR'" [image]="'assets/images/error.png'" [top]="'30vh'"></app-no-data>
         </ng-template>
 
         <!-- SEARCH  -->
         <ng-template #noSearch>
-          <div class="error-serve">
-            <span class="text-second-color">{{'COMMON.SEARCH_ANY' | translate}}</span>
-          </div>
+          <app-no-data [title]="'COMMON.SEARCH_ANY'" [showImage]="false" [image]="'assets/images/empty.png'" [top]="'30vh'"></app-no-data>
         </ng-template>
 
         <!-- IS NO DATA  -->
         <ng-template #noData>
-          <div class="error-serve">
-            <span class="text-second-color">{{'COMMON.NO_DATA' | translate}}</span>
-          </div>
+          <app-no-data [title]="'COMMON.NO_DATA'" [image]="'assets/images/empty.png'" [top]="'30vh'"></app-no-data>
         </ng-template>
 
         <ng-template #loader>
-          <ion-spinner class="color-component"></ion-spinner>
+          <app-spinner ></app-spinner>
         </ng-template>
 
       </div>

@@ -15,7 +15,7 @@ import { gotToTop } from '@bible/shared/shared/utils/utils';
         </div>
 
         <ion-card class="fade-in-card" >
-          <ion-card-content class="text-second-color">
+          <ion-card-content class="text-second-color components-color-ligth">
             En el mundo hay muchas personas famosas. Algunas son muy conocidas en su propia comunidad, ciudad o nación, y otras en el mundo entero. Pero el hecho de que usted sepa el nombre de alguien famoso no significa que conozca a esa persona, es decir, que esté enterado de los detalles de su pasado o de cómo es en realidad.
 
             2 Aunque ya han pasado unos dos mil años desde que Jesucristo vivió en la Tierra, en todo el mundo se habla de él. Sin embargo, existe mucha confusión sobre quién fue en realidad. Algunos dicen que fue tan solo un hombre bueno. Otros piensan que no fue más que un profeta. Y hay quienes creen que Jesús es Dios y debemos adorarlo. ¿Será esto cierto?

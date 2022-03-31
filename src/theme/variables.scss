@@ -243,6 +243,16 @@
 }
 
 $principalColor: #0B3665;
+$tertiary: #fff; //color texto claro
+$fifthiary: #282c34; //color texto oscuro
+
+.text-color-light{
+  color: $tertiary;
+}
+
+.text-color-dark{
+  color: $fifthiary;
+}
 
 ion-refresher {
   // margin-top: 50px;
@@ -278,7 +288,6 @@ ion-spinner {
 }
 
 .text-color{
-  // color: #545454;
   color: white;
 }
 
@@ -291,6 +300,10 @@ ion-spinner {
   background: #405058;
 }
 
+.components-color-ligth{
+  background: white;
+}
+
 .ripple-parent {
   position: relative;
   overflow: hidden;
@@ -300,21 +313,19 @@ ion-spinner {
   text-transform: capitalize;
 }
 
+ion-list {
+  background: #EEEEEE !important;
+  width:100%;
 
-//ERROR
-.error-serve{
-  width: 100%;
-  height: 500px;
-  display: block;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-content: center;
+  ion-item{
+    --background: #EEEEEE !important;
+    color: #545454;
 
-  div{
-    width: 80%;
-    text-align: center;
+    ion-label{
+      margin-left: 10%;
+      // height:50px;
+    }
+
   }
 }
 
@@ -326,6 +337,13 @@ ion-card{
 ion-searchbar {
   --box-shadow: none !important;
   --border-radius: 50px !important;
+
+  .searchbar-input-container {
+    input{
+      background: #fff !important;
+      color: #545454 !important;
+    }
+  }
 }
 //END CONFIG*****************************
 
@@ -368,6 +386,9 @@ ion-searchbar {
   form{
     margin-top: 10px;
     width: 90%;
+    ion-item{
+      color: white !important;
+    }
   }
 }
 

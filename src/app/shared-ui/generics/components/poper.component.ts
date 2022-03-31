@@ -18,11 +18,12 @@ export class PoperComponent {
   option: string = '';
 
 
-  constructor(public popoverController: PopoverController) {
-   }
+  constructor(public popoverController: PopoverController) { }
 
 
   send(bool:boolean): void{
     this.popoverController.dismiss(bool)
   }
+
+
 }

@@ -1,13 +1,20 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
+import { NoDataComponent } from './components/no-data.component';
 import { PoperComponent } from './components/poper.component';
+import { SpinnerComponent } from './components/spinner.component';
 
+const COMPONENTS = [
+  SpinnerComponent,
+  PoperComponent,
+  NoDataComponent
+];
 
 @NgModule({
   declarations: [
-    PoperComponent
+    ...COMPONENTS
   ],
   imports: [
     CommonModule,
@@ -15,7 +22,7 @@ import { PoperComponent } from './components/poper.component';
     TranslateModule.forChild(),
   ],
   exports:[
-    PoperComponent
+    ...COMPONENTS
   ]
 })
 export class GenericsModule { }

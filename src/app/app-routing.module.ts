@@ -1,22 +1,18 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { LangGuard } from './core/i18n/guards/lang.guard';
 
 const routes: Routes = [
   {
     path: 'chapter',
-    loadChildren: () => import('./chapters/chapters.module').then( m => m.ChaperPageModule),
-    canActivate: [LangGuard],
+    loadChildren: () => import('./chapters/chapters.module').then( m => m.ChaperPageModule)
   },
   {
     path: 'how-is-he',
-    loadChildren: () => import('./how-is-he/how-is-he.module').then( m => m.HowIsHePageModule),
-    canActivate: [LangGuard],
+    loadChildren: () => import('./how-is-he/how-is-he.module').then( m => m.HowIsHePageModule)
   },
   {
     path: 'favourite',
-    loadChildren: () => import('./favourite/favourite.module').then( m => m.FavouritePageModule),
-    canActivate: [LangGuard],
+    loadChildren: () => import('./favourite/favourite.module').then( m => m.FavouritePageModule)
   },
   {
     path: 'discipleship',
@@ -24,8 +20,7 @@ const routes: Routes = [
   },
   {
     path: 'guide',
-    loadChildren: () => import('./guide/guide.module').then( m => m.GuidePageModule),
-    canActivate: [LangGuard],
+    loadChildren: () => import('./guide/guide.module').then( m => m.GuidePageModule)
   },
   {
     path: '**',
