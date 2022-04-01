@@ -1,16 +1,5 @@
 @import '../../../theme/variables';
 
-// ion-segment{
-//   height: 50px;
-// }
-
-// ion-segment-button{
-//   // --background: #94BBFF !important;
-//   // color: white;
-//   margin-left: 2%;
-//   margin-right: 2%;
-// }
-
 ion-card {
   width: 90%;
   // padding: 0px;
@@ -29,3 +18,15 @@ ion-card {
   background: #CCC;
 }
 
+
+.active-class {
+  --background: #4984C3;
+}
+
+ion-card-header{
+  padding: 0px !important;
+}
+
+ion-segment-button{
+  min-width: auto !important;
+}

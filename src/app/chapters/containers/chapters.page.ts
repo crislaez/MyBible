@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PoperComponent } from '@bible/shared-ui/generics/components/poper.component';
+import { PopoverComponent } from '@bible/shared-ui/generics/components/popover.component';
 import * as BibleActions from '@bible/shared/bible/actions/bible.actions';
 import { Menu } from '@bible/shared/bible/models';
 import * as fromBible from '@bible/shared/bible/selectors/bible.selectors';
 import { checkObject, gotToTop } from '@bible/shared/shared/utils/utils';
 import { StorageActions } from '@bible/shared/storage';
-import { Share } from '@capacitor/share';
 import { IonContent, PopoverController } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable } from 'rxjs';
@@ -28,17 +27,12 @@ import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
                 <div class="header">
                   <div class="header-content" >
                     <ng-container *ngIf="allPassages?.length > 0; else noPassages">
-                      <ion-button class="background-component text-color-white" size="small" slot="start" *ngFor="let passage of allPassages" (click)="getVerses(passage?.passage)" >{{ getChaptersNumber(passage?.passage, menu) }} </ion-button>
-                    </ng-container>
-<!--
-                    <ion-segment>
-                      <ng-container *ngIf="allPassages?.length > 0; else noPassages">
-                        <ion-segment-button *ngFor="let passage of allPassages" (click)="getVerses(passage?.passage)" value="">
-                        {{ getChaptersNumber(passage?.passage, menu) }}
+                      <ion-segment scrollable (ionChange)="segmentChanged($any($event))" [(ngModel)]="selected">
+                        <ion-segment-button *ngFor="let passage of allPassages; let i = index;" [id]="passage?.passage" [value]="passage?.passage" class="title-color-primary">
+                          <ion-label>{{ getChaptersNumber(passage?.passage, menu) }}</ion-label>
                         </ion-segment-button>
-                      </ng-container>
-                    </ion-segment> -->
-
+                      </ion-segment>
+                    </ng-container>
                     <ng-template #noPassages>
 
                     </ng-template>
@@ -60,12 +54,7 @@ import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
                         </ion-card>
 
                         <ng-container *ngFor="let numberVerse of getNumberOfVerses(chapter?.text)">
-                          <!-- <ion-card class="fade-in-card ion-activatable ripple-parent" ion-long-press [interval]="400" (pressed)="presentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )">
-                            <ion-card-content class="text-second-color"><span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}</ion-card-content>
-
-                            <ion-ripple-effect></ion-ripple-effect>
-                          </ion-card> -->
-                          <ion-card class="fade-in-card ion-activatable ripple-parent components-color-ligth">
+                          <ion-card class="fade-in-card ion-activatable ripple-parent components-color-ligth" ion-long-press [interval]="400" (pressed)="presentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )">
                             <ion-card-content class="text-second-color"><span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}</ion-card-content>
 
                             <ion-ripple-effect></ion-ripple-effect>
@@ -123,7 +112,7 @@ export class ChaptersPage {
   status$ = this.store.select(fromBible.getChapterStatus);
   menu$ = this.store.select(fromBible.getMenu);
   reload$ = new EventEmitter<string>();
-
+  selected = '';
   chapter$: Observable<{text:any, passageName:string, passageNumber:number}> = combineLatest([
     this.route.params,
     this.route.queryParams,
@@ -155,8 +144,16 @@ export class ChaptersPage {
     private route: ActivatedRoute,
     private router: Router,
     public popoverController: PopoverController
-  ) { }
+  ) {
+    this.selected = this.getParamsData();
+  }
 
+
+  ionViewWillEnter(): void{
+    setTimeout(() => {
+      this.slideChangedScroll(this.getParamsData())
+    },1000)
+  }
 
   getChaptersNumber(englisChapter: string, menu:Menu): string{
     const chapterSplited = (englisChapter || '')?.split(' ');
@@ -221,35 +218,47 @@ export class ChaptersPage {
     if(nextPageNumber > 0 && nextPageNumber <= allPassages?.length){
       this.router.navigate( ['/chapter/'+ passageName], { queryParams: {verseNumber: nextPageNumber}});
     }
+
+    this.selected = `${this.route.snapshot.params?.['passage']} ${nextPageNumber.toString()}`;
+    this.slideChangedScroll(`${this.route.snapshot.params?.['passage']} ${nextPageNumber.toString()}`)
+  }
+
+  segmentChanged({detail:{value}}): void{
+    this.getVerses(value)
+  }
+
+  slideChangedScroll(passage: string) {
+    document.getElementById(passage)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center'
+    });
+  }
+
+  getParamsData(): string{
+    const passage = this.route.snapshot.params?.['passage'] || null;
+    const verseNumber = this.route.snapshot.queryParams?.['verseNumber'] || null;
+    return `${passage} ${verseNumber}`;
   }
 
   async presentPopover(ev: any, bookName: string, numberVerse: string, verse: string) {
     const popover = await this.popoverController.create({
-      component: PoperComponent,
+      component: PopoverComponent,
       cssClass: 'my-custom-class',
       event: ev,
       translucent: true,
       componentProps:{
-        button:'save'
+        button:'save',
+        bookName,
+        numberVerse,
+        verse
       }
     });
     await popover.present();
 
     const { role, data } = await popover.onDidDismiss();
-
-    if(data){
-      await this.sharedContent(bookName, `${numberVerse}. ${verse}`)
-    }
   }
 
-  async sharedContent(title: string, text: string){
-    await Share.share({
-      title,
-      text,
-      url:'',
-      dialogTitle: title,
-    });
-   }
 
 
 }

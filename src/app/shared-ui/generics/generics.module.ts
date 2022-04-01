@@ -3,12 +3,12 @@ import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { NoDataComponent } from './components/no-data.component';
-import { PoperComponent } from './components/poper.component';
+import { PopoverComponent } from './components/popover.component';
 import { SpinnerComponent } from './components/spinner.component';
 
 const COMPONENTS = [
   SpinnerComponent,
-  PoperComponent,
+  PopoverComponent,
   NoDataComponent
 ];
 
