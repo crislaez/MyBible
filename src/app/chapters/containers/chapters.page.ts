@@ -33,6 +33,7 @@ import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
                         </ion-segment-button>
                       </ion-segment>
                     </ng-container>
+
                     <ng-template #noPassages>
 
                     </ng-template>
@@ -54,10 +55,10 @@ import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
                         </ion-card>
 
                         <ng-container *ngFor="let numberVerse of getNumberOfVerses(chapter?.text)">
-                          <ion-card class="fade-in-card ion-activatable ripple-parent components-color-ligth" ion-long-press [interval]="400" (pressed)="presentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )">
+                          <!-- ion-long-press [interval]="400" (pressed)="presentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )" -->
+                          <ion-card class="fade-in-card components-color-ligth" >
                             <ion-card-content class="text-second-color"><span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}</ion-card-content>
-
-                            <ion-ripple-effect></ion-ripple-effect>
+                            <!-- <ion-ripple-effect></ion-ripple-effect> -->
                           </ion-card>
                         </ng-container>
                       </ng-container>
