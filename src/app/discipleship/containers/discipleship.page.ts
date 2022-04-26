@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, ViewChild } from '@an
 import { DiscipleshipActions, fromDiscipleship } from '@bible/shared/discipleship';
 import { checkObject, gotToTop, trackById } from '@bible/shared/shared/utils/utils';
 import { IonContent } from '@ionic/angular';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { startWith, switchMap, tap } from 'rxjs/operators';
 
 
@@ -16,12 +16,11 @@ import { startWith, switchMap, tap } from 'rxjs/operators';
           <h1>{{ 'COMMON.DISCIPLESHIPS' | translate }}</h1>
         </div>
 
-
         <ng-container *ngFor="let item of menu; let i = index; trackBy: trackById">
           <details>
             <summary>
               <ion-card class="fade-in-card margin-top align-text components-color-ligth" (click)="searchVerses(item?.text)" >
-                <ion-card-header class="flex-content span">
+                <ion-card-header class="flex-content span text-second-color">
                   {{ item?.label | translate }}
                 </ion-card-header>
               </ion-card>
@@ -35,8 +34,8 @@ import { startWith, switchMap, tap } from 'rxjs/operators';
 
                       <ng-container *ngFor="let verse of verses">
                       <!-- fade-in-card -->
-                        <ion-card class="margin-top align-text summary-items components-color-ligth">
-                          <ion-card-header class="span">
+                        <ion-card class="margin-top summary-items components-color-ligth">
+                          <ion-card-header class="span text-second-color">
                             {{ verse?.split('|')[0] }}
                           </ion-card-header>
 
@@ -54,13 +53,6 @@ import { startWith, switchMap, tap } from 'rxjs/operators';
           </details>
 
         </ng-container>
-
-        <!--  -->
-
-        <!-- REFRESH -->
-        <!-- <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-          <ion-refresher-content></ion-refresher-content>
-        </ion-refresher> -->
 
         <!-- IS ERROR -->
         <ng-template #serverError>

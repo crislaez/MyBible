@@ -1,0 +1,32 @@
+@import '../../../theme/variables';
+
+ion-card {
+  width: 90%;
+  // padding: 0px;
+  margin-top: 5px;
+
+  ion-icon{
+    color: black;
+  }
+
+}
+
+.disabled{
+  pointer-events: none;
+  /* for "disabled" effect */
+  opacity: 0.5;
+  background: #CCC;
+}
+
+
+.active-class {
+  --background: #4984C3;
+}
+
+ion-card-header{
+  padding: 0px !important;
+}
+
+ion-segment-button{
+  min-width: auto !important;
+}

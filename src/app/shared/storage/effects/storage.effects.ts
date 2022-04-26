@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import * as NotificationActions from '@bible/shared/notification/actions/notification.actions';
+import { NotificationActions } from '@bible/shared/notification';
 import { EntityStatus } from '@bible/shared/shared/utils/utils';
 import { ToastController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import * as StorageActions from '../actions/storage.atcions';
 import { StorageService } from '../services/storage.service';
 
@@ -12,33 +12,82 @@ import { StorageService } from '../services/storage.service';
 @Injectable()
 export class StorageEffects {
 
-  loadStorage$ = createEffect( () =>
+  readonly storageKeyLast = 'myBibleLastVerse';
+  readonly storageKeyVerse = 'myBibleVerses';
+
+  loadLastVerse$ = createEffect( () =>
     this.actions$.pipe(
       ofType(
-        StorageActions.loadStorage,
-        StorageActions.insertStorageSuccess
+        StorageActions.loadLastVerse,
+        StorageActions.insertLastVerseSuccess,
       ),
       switchMap( () =>
-        this._storage.getVerse().pipe(
-          map( (storage): any => StorageActions.saveStorage({ storage, error:undefined, status: EntityStatus.Loaded})),
+        this._storage.getLastVerse(this.storageKeyLast).pipe(
+          map( (lastVerse) => StorageActions.saveLastVerse({ lastVerse, error:undefined, status: EntityStatus.Loaded})),
+          catchError((error) => of(StorageActions.saveLastVerse({ lastVerse: '', error, status: EntityStatus.Loaded}))),
+        )
+      )
+    )
+  );
+
+  insertStorage$ = createEffect( () =>
+    this.actions$.pipe(
+      ofType(StorageActions.insertLastVerse),
+      switchMap( ({lastVerse}) =>
+        this._storage.savelastVerse(lastVerse).pipe(
+          map( () => StorageActions.insertLastVerseSuccess()),
+          catchError((error) => of(StorageActions.insertLastVerseFailure({ error}) )),
+        )
+      )
+    )
+  );
+
+  loadVerses$ = createEffect( () =>
+    this.actions$.pipe(
+      ofType(
+        StorageActions.loadVerses,
+        StorageActions.insertVerseSuccess,
+        StorageActions.deleteVerseSuccess
+      ),
+      switchMap( () =>
+        this._storage.getAllVerse(this.storageKeyVerse).pipe(
+          map( (verses) => StorageActions.saveVerses({ verses, error:undefined, status: EntityStatus.Loaded})),
+          catchError((error) => of(StorageActions.saveVerses({ verses: [], error, status: EntityStatus.Loaded}))),
+        )
+      )
+    )
+  );
+
+  insertVerse$ = createEffect( () =>
+    this.actions$.pipe(
+      ofType(StorageActions.insertVerse),
+      switchMap( ({verse}) =>
+        this._storage.insetVerse(verse).pipe(
+          switchMap( () => of(
+            StorageActions.insertVerseSuccess(),
+            NotificationActions.notificationSuccess({message:'COMMON.SAVE_VERSE_SUCCESS'})
+          )),
           catchError((error) => of(
-            StorageActions.saveStorage({ storage: '', error, status: EntityStatus.Loaded}),
-            // NotificationActions.notificationFailure({message:'ERRORS.ERROR_LOADING'})
+            StorageActions.insertVerseFailure({ error }),
+            NotificationActions.notificationFailure({message:'COMMON.VERSE_FAILURE'})
           )),
         )
       )
     )
   );
 
-  saveStorage$ = createEffect( () =>
+  deleteVerse$ = createEffect( () =>
     this.actions$.pipe(
-      ofType(StorageActions.insertStorage),
-      switchMap( ({storage}) =>
-        this._storage.saveVerse(storage).pipe(
-          map( () => StorageActions.insertStorageSuccess({ message: '' })),
+      ofType(StorageActions.deleteVerse),
+      switchMap( ({verse}) =>
+        this._storage.deleteVerse(verse).pipe(
+          switchMap( () => of(
+            StorageActions.deleteVerseSuccess(),
+            NotificationActions.notificationSuccess({message:'COMMON.DELETE_VERSE_SUCCESS'})
+          )),
           catchError((error) => of(
-            StorageActions.insertStorageFailure({ message: '', error}),
-            // NotificationActions.notificationFailure({message:'ERRORS.ERROR_LOADING'})
+            StorageActions.deleteVerseFailure({ error }),
+            NotificationActions.notificationFailure({message:'COMMON.VERSE_FAILURE'})
           )),
         )
       )
@@ -47,7 +96,8 @@ export class StorageEffects {
 
   loadBibleInit$ = createEffect(() =>
     of(
-      StorageActions.loadStorage(),
+      StorageActions.loadLastVerse(),
+      StorageActions.loadVerses()
     )
   );
 

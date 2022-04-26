@@ -6,9 +6,14 @@ export const selectStorageState = createFeatureSelector<fromStorage.State>(
 );
 
 
-export const getStorage = createSelector(
+export const getLastVerse = createSelector(
   selectStorageState,
-  (state) => state.storage
+  (state) => state.lastVerse
+);
+
+export const getVerses = createSelector(
+  selectStorageState,
+  (state) => state.verses
 );
 
 export const getStatus = createSelector(

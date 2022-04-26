@@ -13,9 +13,8 @@ import { filter, map, shareReplay } from 'rxjs/operators';
   selector: 'app-root',
   template:`
   <ion-app>
-
     <!-- HEDAER  -->
-    <ion-header >
+    <ion-header class="ion-no-border">
       <ion-toolbar class="background-component">
          <ion-button  fill="clear" size="small" slot="start" (click)="open()">
             <ion-menu-button class="text-color-white"></ion-menu-button>
@@ -90,8 +89,9 @@ export class RootComponent {
   );
 
   footerList = [
-    {id:1, link:'how-is-he', icon:'heart-outline'},
-    {id:2, link:'favourite', icon:'bookmark-outline'},
+    // {id:1, link:'how-is-he', icon:'heart-outline'},
+    {id:1, link:'saved', icon:'bookmark-outline'},
+    {id:2, link:'favourite', icon:'heart-outline'},
     {id:3, link:'discipleship', icon:'reader-outline'},
     {id:4, link:'guide', icon:'search-outline'}
   ]

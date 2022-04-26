@@ -88,7 +88,7 @@ export class FavouritePage  {
   reload$ = new EventEmitter<string>();
   menu$ = this.store.select(fromBible.getMenu);
   status$ = this.store.select(fromBible.getVerseStatus);
-  lastVerse$ = this.store.select(fromStorage.getStorage);
+  lastVerse$ = this.store.select(fromStorage.getLastVerse);
 
   verseOfDay$ = this.reload$.pipe(
     startWith(''),

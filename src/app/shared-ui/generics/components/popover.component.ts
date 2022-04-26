@@ -1,12 +1,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { StorageActions } from '@bible/shared/storage';
 import { Share } from '@capacitor/share';
 import { PopoverController, NavParams } from '@ionic/angular';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-poper',
   template: `
     <ion-list lines="none">
-      <ion-item detail (click)="sharedContent()">{{ 'COMMON.SEND' | translate }}</ion-item>
+      <!-- <ion-item detail (click)="sharedContent()">{{ 'COMMON.SEND' | translate }}</ion-item> -->
+      <ion-item detail *ngIf="isSave" (click)="saveVerse()">{{ 'COMMON.SAVE' | translate }}</ion-item>
+      <ion-item detail *ngIf="!isSave" (click)="deleteVerse()">{{ 'COMMON.DELETE' | translate }}</ion-item>
       <ion-item detail="false" (click)="close()">{{ 'COMMON.CLOSE' | translate }}</ion-item>
     </ion-list>
   `,
@@ -15,35 +19,61 @@ import { PopoverController, NavParams } from '@ionic/angular';
 })
 export class PopoverComponent {
 
-  bookName:string = '';
-  numberVerse:string = '';
-  verse:string = '';
-
+  verse: {title:string, number:string, body:string}
+  isSave:boolean = true;
 
   constructor(
     public popoverController: PopoverController,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private store: Store
   ) {
-    this.bookName = this.navParams.get('bookName')
-    this.numberVerse = this.navParams.get('numberVerse')
-    this.verse = this.navParams.get('verse')
+    this.verse = this.navParams.get('verse');
+    this.isSave = this.navParams.get('isSave');
   }
 
 
-  close():void {
+  close(): void {
     this.popoverController.dismiss(false)
   }
 
+  saveVerse(): void{
+    const verse = {
+      title: this.isSave ? this.verseTitle : this.verse?.title,
+      body: this.verse?.body
+    };
+
+    this.store.dispatch(StorageActions.insertVerse({verse}));
+    this.close();
+  }
+
+  deleteVerse(): void{
+    this.store.dispatch(StorageActions.deleteVerse({verse: this.verse}))
+    this.close();
+  }
+
   async sharedContent(){
+    console.log(this.isSave ? this.verseTitle : this.verse?.title)
+    console.log(this.verse.body)
+
     await Share.share({
-      title: this.bookName,
-      text: `${this.numberVerse}. ${this.verse}`,
+      title: this.isSave ? this.verseTitle : this.verse?.title,
+      text: this.verse.body,
       url:'',
-      dialogTitle: this.bookName,
+      dialogTitle: this.verse?.title
     });
 
     this.popoverController.dismiss(null)
   }
 
+  get verseTitle(): string{
+    const splitTitle = this.verse?.title?.split(' ');
+    const lastIndex = (splitTitle || [])?.[splitTitle?.length -1] || '0';
+
+    return [
+      ...(lastIndex === '0' ? splitTitle?.slice(0, -1) : splitTitle ),
+      ...(lastIndex !== '0' ? [':'] : []),
+      ...(this.verse?.number ? [this.verse?.number] : [])
+    ].join(' ');
+  }
 
 }

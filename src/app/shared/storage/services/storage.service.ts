@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@capacitor/storage';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { Verse } from '../models';
 
 
 @Injectable({
@@ -9,14 +10,15 @@ import { map } from 'rxjs/operators';
 })
 export class StorageService {
 
-  readonly verse = 'myBibleCl';
+  readonly storageKeyLast = 'myBibleLastVerse';
+  readonly storageKeyVerse = 'myBibleVerses';
 
 
   constructor() { }
 
 
-  getVerse(): Observable<any>{
-    return from(this.loadVerse()).pipe(
+  getLastVerse(verse:string): Observable<any>{
+    return from(this.loadVerse(verse)).pipe(
       map(verse => {
         let response = verse
         if(response?.length === 0) response = '';
@@ -25,36 +27,65 @@ export class StorageService {
     )
   }
 
-  saveVerse(verse: string): Observable<any>{
-    return from(this.loadVerse()).pipe(
-      map(data => {
-        let updateVerse = verse;
+  savelastVerse(verse: string): Observable<any>{
+    return from(this.loadVerse(this.storageKeyLast)).pipe(
+      tap(() => {
+        const updateVerse = verse?.includes('Psalm')
+                          ? verse?.includes('Psalms') ? verse : verse?.replace('Psalm','Psalms')
+                          : verse;
 
-        if(verse?.includes('Psalm')){
-          updateVerse = verse?.includes('Psalms') ? verse : verse?.replace('Psalm','Psalms')
-        }
-
-        const splitedUpdateVerse = updateVerse?.split(' ')
-        const passageName =  splitedUpdateVerse.slice(0, -1)?.join(' ');
-        let passageNumber = splitedUpdateVerse.slice(-1)?.join(' ');
+        const splitedVerse = updateVerse?.split(' ');
+        const passageName =  splitedVerse.slice(0, -1)?.join(' ');
+        let passageNumber = splitedVerse.slice(-1)?.join(' ');
 
         if(passageNumber?.length === 1 && passageNumber?.includes('0')){
           passageNumber = passageNumber?.replace('0', '')
         }
-        const savePassage = passageName +' '+passageNumber
 
-        this.saveLocalVerse(savePassage)
-        return {code:200}
+        const savePassage = passageName +' '+ passageNumber;
+        this.saveLocalVerse(savePassage, this.storageKeyLast);
       })
     )
   }
 
-  async loadVerse(){
-    const verse = await Storage.get({key: this.verse})
-    return await JSON.parse(verse?.value) || []
+  getAllVerse(verse:string): Observable<any>{
+    return from(this.loadVerse(verse)).pipe(
+      map(verse => (verse || []))
+    )
   }
 
-  async saveLocalVerse(verse: string){
-    await Storage.set({key: this.verse, value: JSON.stringify(verse)})
+  insetVerse(verse:Verse): Observable<any>{
+    return from(this.loadVerse(this.storageKeyVerse)).pipe(
+      tap(storageVerses => {
+        const notRepeatVerses = (storageVerses || [])?.filter(({title}) => title !== verse?.title);
+
+        const body = [
+          ...(notRepeatVerses?.length > 0 ? notRepeatVerses : []),
+          ...(verse ? [verse] : [])
+        ];
+
+        this.saveLocalVerse(body, this.storageKeyVerse)
+      })
+    );
   }
+
+  deleteVerse(verse:Verse): Observable<any>{
+    return from(this.loadVerse(this.storageKeyVerse)).pipe(
+      tap(storageVerses => {
+        const filterVerses = (storageVerses || [])?.filter(({title}) => title !== verse?.title);
+        this.saveLocalVerse(filterVerses, this.storageKeyVerse);
+      })
+    );
+  }
+
+  async loadVerse(key:string){
+    const verse = await Storage.get({key})
+    return await JSON.parse(verse?.value) || [];
+  }
+
+  async saveLocalVerse(verse: any, key:string){
+    await Storage.set({key, value: JSON.stringify(verse)})
+  }
+
+
 }

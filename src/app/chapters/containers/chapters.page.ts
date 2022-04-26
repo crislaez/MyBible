@@ -55,10 +55,16 @@ import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
                         </ion-card>
 
                         <ng-container *ngFor="let numberVerse of getNumberOfVerses(chapter?.text)">
-                          <!-- ion-long-press [interval]="400" (pressed)="presentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )" -->
-                          <ion-card class="fade-in-card components-color-ligth" >
-                            <ion-card-content class="text-second-color"><span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}</ion-card-content>
-                            <!-- <ion-ripple-effect></ion-ripple-effect> -->
+                          <ion-card
+                            class="fade-in-card components-color-ligth"
+                            ion-long-press
+                            [interval]="400"
+                            (pressed)="presentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )">
+                            <ion-card-content class="text-second-color">
+                              <span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}
+                            </ion-card-content>
+
+                            <ion-ripple-effect></ion-ripple-effect>
                           </ion-card>
                         </ng-container>
                       </ng-container>
@@ -81,12 +87,12 @@ import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
 
         <!-- IS ERROR -->
         <ng-template #serverError>
-          <app-no-data [title]="'COMMON.ERROR'" [image]="'assets/images/error.png'" [top]="'0vh'"></app-no-data>
+          <app-no-data [title]="'COMMON.ERROR'" [image]="'assets/images/error.png'" [top]="'30vh'"></app-no-data>
         </ng-template>
 
         <!-- IS NO DATA  -->
         <ng-template #noData>
-          <app-no-data [title]="'COMMON.NO_DATA'" [image]="'assets/images/empty.png'" [top]="'0vh'"></app-no-data>
+          <app-no-data [title]="'COMMON.NO_DATA'" [image]="'assets/images/empty.png'" [top]="'30vh'"></app-no-data>
         </ng-template>
 
         <ng-template #loader>
@@ -123,7 +129,7 @@ export class ChaptersPage {
     tap(([{passage}, {verseNumber}]) => {
       const passaAndVersename = passage+' '+verseNumber;
       this.store.dispatch(BibleActions.loadChapter({passage: passaAndVersename}));
-      this.store.dispatch(StorageActions.insertStorage({storage:passaAndVersename}));
+      this.store.dispatch(StorageActions.insertLastVerse({lastVerse:passaAndVersename}));
     }),
     switchMap(([{passage}, {verseNumber}]) =>
       this.store.pipe(select(fromBible.getChapter),
@@ -174,10 +180,10 @@ export class ChaptersPage {
     else this.showButton = false
   }
 
+  // REFRESH
   doRefresh(event) {
     setTimeout(() => {
       this.reload$.next('')
-
       event.target.complete();
     }, 500);
   }
@@ -242,17 +248,15 @@ export class ChaptersPage {
     return `${passage} ${verseNumber}`;
   }
 
-  async presentPopover(ev: any, bookName: string, numberVerse: string, verse: string) {
+  async presentPopover(ev: any, title: string, number: string, body: string) {
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       cssClass: 'my-custom-class',
       event: ev,
       translucent: true,
       componentProps:{
-        button:'save',
-        bookName,
-        numberVerse,
-        verse
+        verse:{ title, number, body },
+        isSave:true
       }
     });
     await popover.present();

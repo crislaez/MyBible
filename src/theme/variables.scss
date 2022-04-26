@@ -255,7 +255,6 @@ $fifthiary: #282c34; //color texto oscuro
 }
 
 ion-refresher {
-  // margin-top: 50px;
   ion-spinner{
     position: relative;
     display: flex;
@@ -318,16 +317,15 @@ ion-spinner {
 }
 
 ion-list {
-  background: #EEEEEE !important;
+  background: #EFF1FF !important;
   width:100%;
 
   ion-item{
-    --background: #EEEEEE !important;
+    --background: #EFF1FF !important;
     color: #545454;
 
     ion-label{
       margin-left: 10%;
-      // height:50px;
     }
 
   }
@@ -358,9 +356,7 @@ ion-searchbar {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  background: #EEEEEE !important;  // F8F8F8
-  // EEEEEE
-  // align-items: flex-start;
+  background: #EFF1FF !important;
   align-content: flex-start;
 }
 
@@ -375,7 +371,7 @@ ion-searchbar {
   justify-content: center;
   align-items: flex-end;
   align-content: flex-end;
-  background: #EEEEEE !important;
+  background: #EFF1FF !important;
 
   h1, h2{
     font-weight: bold;
@@ -402,6 +398,10 @@ ion-searchbar {
 
 .margin-top{
   margin-top: 10px;
+}
+
+.margin-bottom{
+  margin-bottom: 20px;
 }
 
 .background-none{
@@ -437,7 +437,7 @@ ion-searchbar {
   min-width: 100%;
   width: auto;
   overflow-x: scroll;
-  background: #EEEEEE;
+  background: #EFF1FF;
 
   ion-button {
     box-shadow: none;
@@ -445,16 +445,6 @@ ion-searchbar {
   }
 
 }
-
-// ion-segment{
-//   display: flex;
-//   flex-direction: row;
-//   // min-width: 100%;
-//   width: 50%;
-//   width: auto;
-//   overflow-x: scroll;
-//   background: #EEEEEE;
-// }
 
 .fade-in-card {
   animation: fadeIn 2s;
