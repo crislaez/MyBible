@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, ViewChild } from '@an
 import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverComponent } from '@bible/shared-ui/generics/components/popover.component';
 import * as BibleActions from '@bible/shared/bible/actions/bible.actions';
-import { Menu } from '@bible/shared/bible/models';
 import * as fromBible from '@bible/shared/bible/selectors/bible.selectors';
-import { checkObject, gotToTop } from '@bible/shared/shared/utils/utils';
+import { checkObject, getChaptersNumber, gotToTop } from '@bible/shared/shared/utils/utils';
 import { StorageActions } from '@bible/shared/storage';
 import { IonContent, PopoverController } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
@@ -24,61 +23,40 @@ import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
 
               <!-- HEADER  -->
               <ng-container *ngIf="(allPassages$ | async) as allPassages">
+
                 <div class="header">
                   <div class="header-content" >
-                    <ng-container *ngIf="allPassages?.length > 0; else noPassages">
+                    <ng-container *ngIf="allPassages?.length > 0">
                       <ion-segment scrollable (ionChange)="segmentChanged($any($event))" [(ngModel)]="selected">
                         <ion-segment-button *ngFor="let passage of allPassages; let i = index;" [id]="passage?.passage" [value]="passage?.passage" class="title-color-primary">
                           <ion-label>{{ getChaptersNumber(passage?.passage, menu) }}</ion-label>
                         </ion-segment-button>
                       </ion-segment>
                     </ng-container>
-
-                    <ng-template #noPassages>
-
-                    </ng-template>
                   </div>
                 </div>
 
                 <ng-container *ngIf="status !== 'pending'; else loader">
                   <ng-container *ngIf="status !== 'error'; else serverError">
-
                     <ng-container *ngIf="!!chapter?.text; else noData">
-
                       <ng-container *ngIf="checkObject(chapter?.text)">
-                        <ion-card class="fade-in-card margin-top background-none align-text">
-                          <ion-card-header class="flex-content">
-                            <ion-button fill="clear" [disabled]="chapter?.passageNumber === 1 || chapter?.passageNumber === 0" (click)="nextVerse(false, chapter?.passageName, allPassages)"> <ion-icon class="medium-text" name="chevron-back-outline"></ion-icon> </ion-button>
-                            <ion-card-title class="text-second-color">{{ getFilterName(getChaptersNumber(chapter?.passageName, menu)) }}</ion-card-title>
-                            <ion-button fill="clear" [disabled]="chapter?.passageNumber === allPassages?.length || chapter?.passageNumber === 0" (click)="nextVerse(true, chapter?.passageName, allPassages)"> <ion-icon class="medium-text" name="chevron-forward-outline"></ion-icon> </ion-button>
-                          </ion-card-header>
-                        </ion-card>
-
-                        <ng-container *ngFor="let numberVerse of getNumberOfVerses(chapter?.text)">
-                          <ion-card
-                            class="fade-in-card components-color-ligth"
-                            ion-long-press
-                            [interval]="400"
-                            (pressed)="presentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )">
-                            <ion-card-content class="text-second-color">
-                              <span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}
-                            </ion-card-content>
-
-                            <ion-ripple-effect></ion-ripple-effect>
-                          </ion-card>
-                        </ng-container>
+                        <app-chapter-body
+                          [chapter]="chapter"
+                          [menu]="menu"
+                          [allPassages]="allPassages"
+                          (presentPopover)="presentPopover($event)"
+                          (nextVerse)="nextVerse($event)">
+                        </app-chapter-body>
                       </ng-container>
-
                     </ng-container>
                   </ng-container>
                 </ng-container>
+
               </ng-container>
 
             </ng-container>
           </ng-container>
-
         </ng-container>
-
 
         <!-- REFRESH -->
         <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
@@ -110,9 +88,11 @@ import { filter, map, startWith, switchMap, tap } from 'rxjs/operators';
 })
 export class ChaptersPage {
 
-  @ViewChild(IonContent, {static: true}) content: IonContent;
+
   checkObject = checkObject;
   gotToTop = gotToTop;
+  getChaptersNumber = getChaptersNumber;
+  @ViewChild(IonContent, {static: true}) content: IonContent;
   showButton: boolean = false;
 
   passageName = new EventEmitter();
@@ -153,25 +133,15 @@ export class ChaptersPage {
     public popoverController: PopoverController
   ) {
     this.selected = this.getParamsData();
+    console.log('selected -> ',this.selected)
   }
+
 
 
   ionViewWillEnter(): void{
     setTimeout(() => {
       this.slideChangedScroll(this.getParamsData())
     },1000)
-  }
-
-  getChaptersNumber(englisChapter: string, menu:Menu): string{
-    const chapterSplited = (englisChapter || '')?.split(' ');
-    const firstChapterNumber = chapterSplited[chapterSplited?.length -3] || '';
-    const chapter: any = chapterSplited[chapterSplited?.length -2] || '';
-    const number = chapterSplited[chapterSplited?.length -1] || '';
-
-    let property = !!firstChapterNumber ? firstChapterNumber+' '+chapter: chapter
-    return !chapter || !isNaN(chapter)
-          ? chapter +' '+ menu[number] || englisChapter
-          : (menu[property] || chapter) +' '+ number
   }
 
   // SCROLL EVENT
@@ -207,16 +177,7 @@ export class ChaptersPage {
     this.router.navigate( ['/chapter/'+ passageName], { queryParams: {verseNumber: passageNumber}});
   }
 
-  getNumberOfVerses(allverses: any): string[]{
-    return Object.keys(allverses || {})
-  }
-
-  getFilterName(passageChange:string): string{
-    const oneChapterBook = ['Judas 0', '3 Juan 0', '2 Juan 0', 'Filemón 0', 'Abdías 0'];
-    return oneChapterBook?.includes(passageChange) ? (passageChange || '')?.slice(0,-1) : passageChange;
-  }
-
-  nextVerse(bool: boolean, actualPassage: string, allPassages: {passage: string}[]): void{
+  nextVerse({bool, actualPassage, allPassages}): void{
     const splitedPassage = actualPassage?.split(' ');
     const passageName = splitedPassage?.slice(0, -1)?.join(' ');
     const passageNumber = Number(splitedPassage?.slice(-1)?.join('') ||'');
@@ -226,8 +187,11 @@ export class ChaptersPage {
       this.router.navigate( ['/chapter/'+ passageName], { queryParams: {verseNumber: nextPageNumber}});
     }
 
-    this.selected = `${this.route.snapshot.params?.['passage']} ${nextPageNumber.toString()}`;
-    this.slideChangedScroll(`${this.route.snapshot.params?.['passage']} ${nextPageNumber.toString()}`)
+    let passage = this.route.snapshot.params?.['passage']
+    passage = passage?.includes('Psalms') ? passage?.replace('Psalms', 'Psalm') : passage;
+
+    this.selected = `${passage} ${nextPageNumber.toString()}`;
+    this.slideChangedScroll(`${passage} ${nextPageNumber.toString()}`)
   }
 
   segmentChanged({detail:{value}}): void{
@@ -235,6 +199,7 @@ export class ChaptersPage {
   }
 
   slideChangedScroll(passage: string) {
+    passage = passage?.includes('Psalms') ? passage?.replace('Psalms', 'Psalm') : passage;
     document.getElementById(passage)?.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
@@ -243,12 +208,13 @@ export class ChaptersPage {
   }
 
   getParamsData(): string{
-    const passage = this.route.snapshot.params?.['passage'] || null;
+    let passage = this.route.snapshot.params?.['passage'] || null;
+    passage = passage?.includes('Psalms') ? passage?.replace('Psalms', 'Psalm') : passage;
     const verseNumber = this.route.snapshot.queryParams?.['verseNumber'] || null;
     return `${passage} ${verseNumber}`;
   }
 
-  async presentPopover(ev: any, title: string, number: string, body: string) {
+  async presentPopover({ev, title, number, body}) {
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       cssClass: 'my-custom-class',

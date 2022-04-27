@@ -9,7 +9,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LongPressModule } from 'ionic-long-press';
 import { ChaptersPageRoutingModule } from './chapters-routing.module';
 import { ChaptersPage } from './containers/chapters.page';
+import { ChapterBodyComponent } from './components/chapter-body.component';
 
+const COMPONENTS = [
+  ChaptersPage,
+  ChapterBodyComponent
+];
 
 @NgModule({
   imports: [
@@ -24,7 +29,7 @@ import { ChaptersPage } from './containers/chapters.page';
     ChaptersPageRoutingModule
   ],
   declarations: [
-    ChaptersPage
+    ...COMPONENTS
   ]
 })
 export class ChaperPageModule {}

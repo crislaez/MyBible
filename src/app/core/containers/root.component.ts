@@ -36,7 +36,7 @@ import { filter, map, shareReplay } from 'rxjs/operators';
           <ng-container *ngIf="menuList?.length > 0; else noData">
             <ng-container *ngIf="(menu$ | async) as menu; else noItem">
               <ng-container *ngIf="checkObject(menu); else noItem">
-                <ion-item *ngFor="let item of menuList" class="ion-activatable ripple-parent" (click)="redirectTo(item?.passage)">{{menu[item?.passage]}}</ion-item>
+                <ion-item lines="none" *ngFor="let item of menuList" class="ion-activatable ripple-parent" (click)="redirectTo(item?.passage)">{{menu[item?.passage]}}</ion-item>
 
                 <ion-ripple-effect></ion-ripple-effect>
               </ng-container>

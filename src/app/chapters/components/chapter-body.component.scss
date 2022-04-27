@@ -1,0 +1,13 @@
+@import '../../../theme/variables';
+
+:host{
+  width: 100%;
+
+  ion-card-title{
+    font-size: 23px !important;
+  }
+
+  ion-card-header{
+    padding: 0px !important;
+  }
+}

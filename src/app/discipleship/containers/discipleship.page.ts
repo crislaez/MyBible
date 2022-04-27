@@ -64,6 +64,7 @@ import { startWith, switchMap, tap } from 'rxjs/operators';
           <app-no-data [title]="'COMMON.NO_DATA'" [image]="'assets/images/empty.png'" [top]="'0vh'"></app-no-data>
         </ng-template>
 
+        <!-- LOADER  -->
         <ng-template #loader>
           <app-spinner ></app-spinner>
         </ng-template>
@@ -139,7 +140,6 @@ export class DiscipleshipPage {
     switchMap(() =>
       this.store.select(fromDiscipleship.getDiscipleship)
     )
-    // ,tap(data => console.log(data))
   );
 
 
@@ -157,7 +157,6 @@ export class DiscipleshipPage {
   doRefresh(event) {
     setTimeout(() => {
       this.search$.next('')
-
       event.target.complete();
     }, 500);
   }

@@ -2,7 +2,6 @@
 
 ion-card {
   width: 90%;
-  // padding: 0px;
   margin-top: 5px;
 
   ion-icon{
@@ -13,7 +12,6 @@ ion-card {
 
 .disabled{
   pointer-events: none;
-  /* for "disabled" effect */
   opacity: 0.5;
   background: #CCC;
 }
@@ -29,4 +27,5 @@ ion-card-header{
 
 ion-segment-button{
   min-width: auto !important;
+  padding: 10px;
 }
