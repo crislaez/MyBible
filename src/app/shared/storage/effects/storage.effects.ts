@@ -5,7 +5,7 @@ import { ToastController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import * as StorageActions from '../actions/storage.atcions';
+import * as StorageActions from '../actions/storage.actions';
 import { StorageService } from '../services/storage.service';
 
 

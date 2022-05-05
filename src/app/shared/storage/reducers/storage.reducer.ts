@@ -1,6 +1,6 @@
 import { EntityStatus } from '@bible/shared/shared/utils/utils';
 import { createReducer, on } from '@ngrx/store';
-import * as StorageActions from '../actions/storage.atcions';
+import * as StorageActions from '../actions/storage.actions';
 
 
 export const storageFeatureKey = 'storage';
