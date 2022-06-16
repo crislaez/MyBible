@@ -26,13 +26,9 @@ import { Verse } from '@bible/shared/storage/models';
                 <ng-container *ngIf="verses?.length > 0; else noData">
 
                   <ng-container *ngFor="let verse of verses">
-                    <ion-card
-                      class="fade-in-card components-color-ligth"
-                      ion-long-press
-                      [interval]="400"
-                      (pressed)="presentPopover($event,  verse)">
+                    <ion-card class="fade-in-card components-color-ligth">
                       <ion-card-content class="text-second-color">
-
+                        <ion-icon (click)="presentPopover($event,  verse)" name="ellipsis-vertical-outline"></ion-icon>
                         <ion-label class="span">{{ verse?.title }}</ion-label>
                         <br>
                         {{ verse?.body }}

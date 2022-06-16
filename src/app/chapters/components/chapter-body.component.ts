@@ -14,12 +14,9 @@ import { getChaptersNumber } from '@bible/shared/shared/utils/utils';
   </ion-card>
 
   <ng-container *ngFor="let numberVerse of getNumberOfVerses(chapter?.text)">
-    <ion-card
-      class="fade-in-card components-color-ligth"
-      ion-long-press
-      [interval]="400"
-      (pressed)="onPresentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )">
+    <ion-card class="fade-in-card components-color-ligth">
       <ion-card-content class="text-second-color">
+        <ion-icon (click)="onPresentPopover($event, getChaptersNumber(chapter?.passageName, menu), numberVerse, chapter?.text[numberVerse] )" name="ellipsis-vertical-outline"></ion-icon>
         <span class="span">{{ numberVerse }}.</span> {{ chapter?.text[numberVerse] }}
       </ion-card-content>
 

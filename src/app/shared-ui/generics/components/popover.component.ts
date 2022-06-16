@@ -8,7 +8,7 @@ import { Store } from '@ngrx/store';
   selector: 'app-poper',
   template: `
     <ion-list lines="none">
-      <!-- <ion-item detail (click)="sharedContent()">{{ 'COMMON.SEND' | translate }}</ion-item> -->
+      <ion-item detail (click)="sharedContent()">{{ 'COMMON.SEND' | translate }}</ion-item>
       <ion-item detail *ngIf="isSave" (click)="saveVerse()">{{ 'COMMON.SAVE' | translate }}</ion-item>
       <ion-item detail *ngIf="!isSave" (click)="deleteVerse()">{{ 'COMMON.DELETE' | translate }}</ion-item>
       <ion-item detail="false" (click)="close()">{{ 'COMMON.CLOSE' | translate }}</ion-item>
@@ -52,13 +52,10 @@ export class PopoverComponent {
   }
 
   async sharedContent(){
-    console.log(this.isSave ? this.verseTitle : this.verse?.title)
-    console.log(this.verse.body)
-
     await Share.share({
       title: this.isSave ? this.verseTitle : this.verse?.title,
       text: this.verse.body,
-      url:'',
+      url:`https://www.biblegateway.com/passage/?search=${this.verseTitle}`,
       dialogTitle: this.verse?.title
     });
 
