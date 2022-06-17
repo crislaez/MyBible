@@ -133,9 +133,7 @@ export class ChaptersPage {
     public popoverController: PopoverController
   ) {
     this.selected = this.getParamsData();
-    console.log('selected -> ',this.selected)
   }
-
 
 
   ionViewWillEnter(): void{

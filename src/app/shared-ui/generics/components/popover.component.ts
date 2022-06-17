@@ -55,7 +55,7 @@ export class PopoverComponent {
     await Share.share({
       title: this.isSave ? this.verseTitle : this.verse?.title,
       text: this.verse.body,
-      url:`https://www.biblegateway.com/passage/?search=${this.verseTitle}`,
+      url:`https://www.biblegateway.com/passage/?search=${this.verseTitle?.replace(/ /g,'')}&version=RVR1960`,
       dialogTitle: this.verse?.title
     });
 
