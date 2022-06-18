@@ -42,7 +42,7 @@ import { filter, map, startWith, switchMap } from 'rxjs/operators';
 
                 <ion-item detail *ngFor="let item of menuList" class="ion-activatable ripple-parent" (click)="redirectTo(item?.passage)">{{menu[item?.passage]}}</ion-item>
 
-                <ion-ripple-effect type="bounded"></ion-ripple-effect>
+                <ion-ripple-effect type="unbounded"></ion-ripple-effect>
               </ng-container>
             </ng-container>
           </ng-container>
