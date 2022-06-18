@@ -6,10 +6,6 @@ const routes: Routes = [
     path: 'chapter',
     loadChildren: () => import('./chapters/chapters.module').then( m => m.ChaperPageModule)
   },
-  // {
-  //   path: 'how-is-he',
-  //   loadChildren: () => import('./how-is-he/how-is-he.module').then( m => m.HowIsHePageModule)
-  // },
   {
     path: 'saved',
     loadChildren: () => import('./saved/saved.module').then( m => m.SavedPageModule)

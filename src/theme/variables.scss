@@ -283,7 +283,7 @@ ion-spinner {
 
 // PAGE COLOR
 .title-color{
-  color: #545454;
+  color: #282c34;
 }
 
 .title-color-primary{
@@ -317,12 +317,12 @@ ion-spinner {
 }
 
 ion-list {
-  background: #EFF1FF !important;
+  background: #EFF1FF;
   width:100%;
 
   ion-item{
-    --background: #EFF1FF !important;
-    color: #545454;
+    --background: #EFF1FF;
+    color: #282c34;
 
     ion-label{
       margin-left: 10%;
@@ -334,6 +334,10 @@ ion-list {
 ion-card{
   box-shadow: none !important;
   touch-action: pan-y !important;
+
+  ion-card-title{
+    font-size: 23px;
+  }
 }
 
 ion-searchbar {
@@ -343,7 +347,7 @@ ion-searchbar {
   .searchbar-input-container {
     input{
       background: #fff !important;
-      color: #545454 !important;
+      color: #282c34 !important;
     }
   }
 }
@@ -367,16 +371,21 @@ ion-searchbar {
   text-align: center;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-end;
-  align-content: flex-end;
-  background: #EFF1FF !important;
+  // align-items: flex-end;
+  // align-content: flex-end;
+  // background: #EFF1FF !important;
 
   h1, h2{
+    // font-weight: bold;
+    // font-size: 35px;
+    color: #282c34;
     font-weight: bold;
-    font-size: 35px;
-    color: #545454;
+    font-size: 25px;
+    margin-top: 0px;
+    // width: 35%;
+    margin-left: 5%;
   }
 
   ion-back-button{

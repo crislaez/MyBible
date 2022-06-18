@@ -4,7 +4,7 @@ import { EntityStatus } from '@bible/shared/shared/utils/utils';
 import { ToastController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import * as BibleActions from '../actions/bible.actions';
 import { BibleService } from '../services/bible.service';
 
@@ -17,7 +17,7 @@ export class BibleEffects {
       ofType(BibleActions.loadBooks),
       switchMap( () =>
         this._bible.getBible().pipe(
-          map( ({books}): any => BibleActions.saveBooks({ books, error:undefined, status: EntityStatus.Loaded})),
+          map((books) => BibleActions.saveBooks({ books, error:undefined, status: EntityStatus.Loaded})),
           catchError((error) => of(
             BibleActions.saveBooks({ books: [], error, status: EntityStatus.Loaded}),
             NotificationActions.notificationFailure({message:'ERRORS.ERROR_LOADING'})

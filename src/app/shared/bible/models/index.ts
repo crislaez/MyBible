@@ -3,12 +3,17 @@ export interface Bible {
 }
 
 export interface Book {
-  passage: string,
-  chapters: string[]
+  passage: string;
+  spanishPassage?: string;
+  chapters: string[];
 }
 
 export interface Chapter {
 
+}
+
+export interface ResponseBooks {
+  books: Book[]
 }
 
 

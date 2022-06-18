@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { StorageActions } from '@bible/shared/storage';
 import { Share } from '@capacitor/share';
-import { PopoverController, NavParams } from '@ionic/angular';
+import { NavParams, PopoverController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 
 @Component({

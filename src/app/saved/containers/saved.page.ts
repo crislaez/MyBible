@@ -1,11 +1,14 @@
-import { IonContent, PopoverController } from '@ionic/angular';
 import { ChangeDetectionStrategy, Component, EventEmitter, ViewChild } from '@angular/core';
-import { checkObject, gotToTop } from '@bible/shared/shared/utils/utils';
-import { Store } from '@ngrx/store';
-import { fromStorage } from '@bible/shared/storage';
-import { startWith, tap, switchMap, map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { PopoverComponent } from '@bible/shared-ui/generics/components/popover.component';
+import { Book } from '@bible/shared/bible/models';
+import * as fromBible from '@bible/shared/bible/selectors/bible.selectors';
+import { checkObject, gotToTop } from '@bible/shared/shared/utils/utils';
+import { fromStorage } from '@bible/shared/storage';
 import { Verse } from '@bible/shared/storage/models';
+import { IonContent, PopoverController } from '@ionic/angular';
+import { Store } from '@ngrx/store';
+import { startWith, switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -26,7 +29,7 @@ import { Verse } from '@bible/shared/storage/models';
                 <ng-container *ngIf="verses?.length > 0; else noData">
 
                   <ng-container *ngFor="let verse of verses">
-                    <ion-card class="fade-in-card components-color-ligth">
+                    <ion-card *ngIf="(books$ | async) as books" class="fade-in-card components-color-ligth" (click)="redirect(verse, books)">
                       <ion-card-content class="text-second-color">
                         <ion-icon (click)="presentPopover($event,  verse)" name="ellipsis-vertical-outline"></ion-icon>
                         <ion-label class="span">{{ verse?.title }}</ion-label>
@@ -80,6 +83,7 @@ export class SavedPage {
   gotToTop = gotToTop;
   showButton: boolean = false;
 
+  books$ = this.store.select(fromBible.getBooks)
   status$ = this.store.select(fromStorage.getStatus);
   reload = new EventEmitter<void>();
   verses$ = this.reload.pipe(
@@ -92,7 +96,8 @@ export class SavedPage {
 
   constructor(
     private store: Store,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private router: Router
   ) { }
 
 
@@ -111,7 +116,17 @@ export class SavedPage {
     }, 500);
   }
 
+  redirect({title}:{title:string}, books: Book[]): void{
+    const [ completeTitle = null ] = title?.split(':');
+    const [ verseNumber = null, ...restTitle ] = [...(completeTitle?.split(' ') || [])?.filter(item => !!item)]?.reverse();
+    const spanisTitle = [...restTitle]?.reverse()?.join(',')?.replace(',',' ');
+    const englishTitle = (books || [])?.find(({spanishPassage}) => spanishPassage?.includes(spanisTitle) || spanishPassage === spanisTitle)
+    const { passage = null } = englishTitle || {};
+    this.router.navigate(['/chapter/'+passage], {queryParams:{verseNumber}})
+  }
+
   async presentPopover(ev: any, verse: Verse) {
+    ev.stopPropagation();
     const popover = await this.popoverController.create({
       component: PopoverComponent,
       cssClass: 'my-custom-class',

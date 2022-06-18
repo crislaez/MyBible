@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import * as fromBible from '@bible/shared/bible/selectors/bible.selectors';
-import { Book } from '@bible/shared/bible/models';
 import { checkObject } from '@bible/shared/shared/utils/utils';
-import { MenuController } from '@ionic/angular';
+import { Keyboard } from '@capacitor/keyboard';
+import { MenuController, Platform } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { filter, map, shareReplay } from 'rxjs/operators';
+import { filter, map, startWith, switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -27,7 +28,9 @@ import { filter, map, shareReplay } from 'rxjs/operators';
     <ion-menu side="start" menuId="first" contentId="main">
       <ion-header>
         <ion-toolbar class="background-component">
-          <ion-title class="text-color-white">{{ 'COMMON.MENU' | translate }}</ion-title>
+          <form (submit)="searchSubmit($event)">
+            <ion-searchbar [placeholder]="'COMMON.SEARCH_BY_BOOK' | translate" [formControl]="search" (ionClear)="clearSearch($event)"></ion-searchbar>
+          </form>
         </ion-toolbar>
       </ion-header>
 
@@ -36,9 +39,10 @@ import { filter, map, shareReplay } from 'rxjs/operators';
           <ng-container *ngIf="menuList?.length > 0; else noData">
             <ng-container *ngIf="(menu$ | async) as menu; else noItem">
               <ng-container *ngIf="checkObject(menu); else noItem">
-                <ion-item lines="none" *ngFor="let item of menuList" class="ion-activatable ripple-parent" (click)="redirectTo(item?.passage)">{{menu[item?.passage]}}</ion-item>
 
-                <ion-ripple-effect></ion-ripple-effect>
+                <ion-item detail *ngFor="let item of menuList" class="ion-activatable ripple-parent" (click)="redirectTo(item?.passage)">{{menu[item?.passage]}}</ion-item>
+
+                <ion-ripple-effect type="bounded"></ion-ripple-effect>
               </ng-container>
             </ng-container>
           </ng-container>
@@ -46,12 +50,12 @@ import { filter, map, shareReplay } from 'rxjs/operators';
 
         <ng-template #noData>
           <ion-list>
-            <ion-item>{{ 'COMMON.NO_DATA' | translate }}</ion-item>
+            <ion-item>{{ 'COMMON.NO_SEARCH_DATA' | translate }}</ion-item>
           </ion-list>
         </ng-template>
 
         <ng-template #noItem>
-            <ion-item >{{ 'COMMON.NO_DATA' | translate }}</ion-item>
+            <ion-item >{{ 'COMMON.NO_SEARCH_DATA' | translate }}</ion-item>
         </ng-template>
       </ion-content>
     </ion-menu>
@@ -75,32 +79,47 @@ import { filter, map, shareReplay } from 'rxjs/operators';
 export class RootComponent {
 
   checkObject = checkObject;
-  menuList$: Observable<Book[]> = this.store.pipe(select(fromBible.getBooks));
-  menu$: Observable<any> = this.store.pipe(select(fromBible.getMenu));
+
+  menu$ = this.store.pipe(select(fromBible.getMenu));
+
+  triggerSearch = new EventEmitter<string>();
+  menuList$ = this.triggerSearch.pipe(
+    startWith(''),
+    switchMap((search) =>
+      this.store.select(fromBible.getBooks).pipe(
+        map((books) => {
+          return !search
+            ? books
+            : books?.filter(({spanishPassage}) => spanishPassage?.toLocaleLowerCase()?.includes(search))
+        })
+      )
+    )
+  );
 
   currentSection$: Observable<{route:string}> = this.router.events.pipe(
     filter((event: any) => event instanceof NavigationStart),
     map((event: NavigationEnd) => {
       const { url = ''} = event || {}
-      let route = url?.split('/')[1];
+      const [, route = null ] = url?.split('/');
       return {route:route || 'home'};
     })
-    ,shareReplay(1)
   );
 
   footerList = [
-    // {id:1, link:'how-is-he', icon:'heart-outline'},
     {id:1, link:'saved', icon:'bookmark-outline'},
     {id:2, link:'favourite', icon:'heart-outline'},
     {id:3, link:'discipleship', icon:'reader-outline'},
     {id:4, link:'guide', icon:'search-outline'}
-  ]
+  ];
+
+  search = new FormControl('');
 
 
   constructor(
     private menu: MenuController,
     private store: Store,
-    private router: Router
+    private router: Router,
+    public platform: Platform,
   ) { }
 
 
@@ -119,5 +138,21 @@ export class RootComponent {
     this.router.navigate(['/chapter/'+passage], {queryParams:{verseNumber}});
     this.menu.close('first');
   }
+
+  // SEARCH
+  searchSubmit(event: Event): void{
+    event.preventDefault();
+    if(!this.platform.is('mobileweb')) Keyboard.hide();
+    this.triggerSearch.next(this.search.value?.toLowerCase());
+  }
+
+  // CLEAR
+  clearSearch(event): void{
+    if(!this.platform.is('mobileweb')) Keyboard.hide();
+    this.search.reset();
+    this.triggerSearch.next('');
+  }
+
+
 
 }

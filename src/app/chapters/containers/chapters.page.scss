@@ -28,4 +28,8 @@ ion-card-header{
 ion-segment-button{
   min-width: auto !important;
   padding: 10px;
+
+  ion-label{
+    font-weight: bold;
+  }
 }

@@ -11,3 +11,17 @@ ion-tab-button, ion-icon{
   }
   color: #4984C3;
 }
+
+ion-searchbar {
+  height: 44px;
+  padding-top: 17px;
+  transform: scaleY(0.8);
+}
+
+ion-content{
+  --background: #EFF1FF !important;
+}
+
+ion-item{
+  --border-color: #DFE3FF;
+}
